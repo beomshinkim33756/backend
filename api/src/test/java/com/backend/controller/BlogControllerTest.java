@@ -31,8 +31,8 @@ public class BlogControllerTest {
     @Autowired
     protected MockMvc mockMvc;
 
-    private final String SEARCH_BLOG_URI = "/api/find/blog";
-    private final String SEARCH_RANK_URI = "/api/find/rank";
+    private final String SEARCH_BLOG_URI = "/api/find/blog"; // 블로그 조회
+    private final String SEARCH_RANK_URI = "/api/find/rank"; // 인기 검색어 조회
 
     @Test
     @DisplayName("블로그 API 호출 파라미터 NULL 오류")
@@ -46,11 +46,11 @@ public class BlogControllerTest {
     @Test
     @DisplayName("블로그 API 호출 파라미터 변조")
     void blog_test_2() throws Exception {
-        MultiValueMap<String, String> parms = new LinkedMultiValueMap<>();
-        parms.add("sort", "accuracy");
-        parms.add("page", "ass");
-        parms.add("size", "10");
-        mockMvc.perform(get(SEARCH_BLOG_URI).params(parms).characterEncoding("UTF-8"))
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("sort", "accuracy");
+        params.add("page", "ass");
+        params.add("size", "10");
+        mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.PARAM_MANIPULATION.getCode()))
                 .andDo(MockMvcResultHandlers.print());

@@ -48,7 +48,7 @@ public class GlobalApiExceptionController {
         body.put("resultCode", ResultCode.SYSTEM_ERROR.getCode());
         body.put("msg", ResultCode.SYSTEM_ERROR.getMsg());
         body.put("timestamp", System.currentTimeMillis());
-        return ResponseEntity.status(ResultCode.SYSTEM_ERROR.getStatus()).body(body);
+        return ResponseEntity.status(ResultCode.SYSTEM_ERROR.getStatus()).contentType(MediaType.APPLICATION_JSON).body(body);
     }
 
     @ExceptionHandler(value = CustomException.class)
@@ -57,10 +57,6 @@ public class GlobalApiExceptionController {
         body.put("resultCode", e.getCode());
         body.put("msg", e.getMsg());
         body.put("timestamp", System.currentTimeMillis());
-        log.error("{}", body);
-        return ResponseEntity
-                .status(e.getStatus())
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(body);
+        return ResponseEntity.status(e.getStatus()).contentType(MediaType.APPLICATION_JSON).body(body);
     }
 }
