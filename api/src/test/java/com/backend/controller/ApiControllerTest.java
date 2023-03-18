@@ -1,6 +1,7 @@
 package com.backend.controller;
 
 import com.backend.exception.ResultCode;
+import com.backend.model.dto.BlogDaoDto;
 import com.backend.service.ApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -70,7 +71,7 @@ public class ApiControllerTest {
         params.add("page", "10");
         params.add("size", "10");
         params.add("keyword", "keyword");
-        when(apiService.findBlogList(any())).thenReturn(new ArrayList());
+        when(apiService.findBlogList(any())).thenReturn(new BlogDaoDto());
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))

@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import com.backend.model.dto.BlogDaoDto;
 import com.backend.model.dto.BlogServiceDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApiServiceImpl implements ApiService {
     @Override
-    public List findBlogList(BlogServiceDto blogServiceDto) throws Exception {
+    public BlogDaoDto findBlogList(BlogServiceDto blogServiceDto) throws Exception {
         return null;
     }
 }

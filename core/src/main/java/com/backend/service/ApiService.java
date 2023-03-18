@@ -1,10 +1,9 @@
 package com.backend.service;
 
 import com.backend.model.dto.BlogServiceDto;
-
-import java.util.List;
+import com.backend.model.dto.BlogDaoDto;
 
 public interface ApiService {
 
-    List findBlogList(BlogServiceDto blogServiceDto) throws Exception;
+    BlogDaoDto findBlogList(BlogServiceDto blogServiceDto) throws Exception;
 }

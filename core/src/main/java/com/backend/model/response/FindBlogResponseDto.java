@@ -1,6 +1,7 @@
 package com.backend.model.response;
 
 import com.backend.exception.ResultCode;
+import com.backend.model.dto.BlogDaoDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,15 +16,15 @@ import java.util.List;
 public class FindBlogResponseDto {
 
     private List documents;
-    private boolean isEnd;
+    private Boolean isEnd;
     private Long totalCount;
     private String resultCode;
     private String msg;
 
-    public FindBlogResponseDto(List documents, boolean isEnd, Long totalCount, ResultCode resultCode) {
-        this.documents = documents;
-        this.isEnd = isEnd;
-        this.totalCount = totalCount;
+    public FindBlogResponseDto(BlogDaoDto blogDaoDto, ResultCode resultCode) {
+        this.documents = blogDaoDto.getDocuments();
+        this.isEnd = blogDaoDto.getIsEnd();
+        this.totalCount = blogDaoDto.getTotalCount();
         this.resultCode = resultCode.getCode();
         this.msg = resultCode.getMsg();
     }

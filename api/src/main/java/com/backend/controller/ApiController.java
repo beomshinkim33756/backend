@@ -3,6 +3,7 @@ package com.backend.controller;
 import com.backend.exception.CustomException;
 import com.backend.exception.ResultCode;
 import com.backend.model.dto.BlogServiceDto;
+import com.backend.model.dto.BlogDaoDto;
 import com.backend.model.request.FindBlogRequestDto;
 import com.backend.model.response.FindBlogResponseDto;
 import com.backend.service.ApiService;
@@ -11,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -25,8 +24,8 @@ public class ApiController {
     public ResponseEntity findBlog(
             @Validated FindBlogRequestDto requestDto
     ) throws Exception {
-        List list = apiService.findBlogList(new BlogServiceDto(requestDto.checkForgery()));
-        return ResponseEntity.ok().body(new FindBlogResponseDto(list, true, 10L, ResultCode.SUCCESS));
+        BlogDaoDto blogDaoDto = apiService.findBlogList(new BlogServiceDto(requestDto.checkForgery()));
+        return ResponseEntity.ok().body(new FindBlogResponseDto(blogDaoDto, ResultCode.SUCCESS));
     }
 
     @GetMapping("/api/v1/find/rank")
