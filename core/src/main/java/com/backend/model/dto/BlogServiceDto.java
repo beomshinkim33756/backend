@@ -1,4 +1,4 @@
-package com.backend.model.dto.service;
+package com.backend.model.dto;
 
 import com.backend.model.request.FindBlogRequestDto;
 import lombok.Getter;
