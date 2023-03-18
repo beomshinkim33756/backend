@@ -22,3 +22,18 @@ spring:
     active: local
   application:
     name: backend-api
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl: create-drop
+
+kakao:
+  blog:
+    url: https://dapi.kakao.com
+  rest:
+    key: dcbaac8be5d8afdbfcd8ba43c53ecc48
+

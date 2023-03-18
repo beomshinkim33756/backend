@@ -61,6 +61,7 @@ project(':api') {
     jar { enabled = false } // jar x
     dependencies {
         implementation project(':core')
+        implementation project(':data')
     }
 
 
