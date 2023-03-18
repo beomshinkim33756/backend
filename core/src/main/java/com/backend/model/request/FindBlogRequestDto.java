@@ -2,7 +2,6 @@ package com.backend.model.request;
 
 import com.backend.exception.CustomException;
 import com.backend.exception.ResultCode;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @ToString
-public class SearchBlogRequestDto {
+public class FindBlogRequestDto {
 
     private String keyword;
 
@@ -25,10 +24,11 @@ public class SearchBlogRequestDto {
     @NotBlank(message = "문서 개수 조건에 누락되었습니다.")
     private String size;
 
-    public void checkForgery() throws CustomException {
+    public FindBlogRequestDto checkForgery() throws CustomException {
         if (!checkSort() || !checkNumber(this.page) || !checkNumber(this.size)) {
             throw new CustomException(ResultCode.PARAM_MANIPULATION);
         }
+        return this;
     }
 
     private boolean checkSort() {

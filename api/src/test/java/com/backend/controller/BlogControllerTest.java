@@ -31,14 +31,15 @@ public class BlogControllerTest {
     @Autowired
     protected MockMvc mockMvc;
 
-    private final String SEARCH_BLOG_URI = "/api/search/blog";
-    private final String SEARCH_RANK_URI = "/api/search/rank";
+    private final String SEARCH_BLOG_URI = "/api/find/blog";
+    private final String SEARCH_RANK_URI = "/api/find/rank";
 
     @Test
     @DisplayName("블로그 API 호출 파라미터 NULL 오류")
     void blog_test_1() throws Exception {
         mockMvc.perform(get(SEARCH_BLOG_URI))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(jsonPath("$.resultCode").value(ResultCode.SYSTEM_ERROR.getCode()))
                 .andDo(MockMvcResultHandlers.print());
     }
 

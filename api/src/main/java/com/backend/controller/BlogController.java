@@ -1,7 +1,7 @@
 package com.backend.controller;
 
 import com.backend.exception.CustomException;
-import com.backend.model.request.SearchBlogRequestDto;
+import com.backend.model.request.FindBlogRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BlogController {
 
-    @GetMapping("/api/search/blog")
-    public ResponseEntity searchBlog(
-            @Validated SearchBlogRequestDto requestDto
+    @GetMapping("/api/find/blog")
+    public ResponseEntity findBlog(
+            @Validated FindBlogRequestDto requestDto
     ) throws CustomException {
-        requestDto.checkForgery();
+        FindBlogRequestDto findBlogRequestDto = requestDto.checkForgery();
         return ResponseEntity.ok().body(null);
     }
 
-    @GetMapping("/api/search/rank")
-    public ResponseEntity searchRank(
+    @GetMapping("/api/find/rank")
+    public ResponseEntity findRank(
 
     ) throws CustomException {
         return ResponseEntity.ok().body(null);

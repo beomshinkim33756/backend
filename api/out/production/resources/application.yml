@@ -12,6 +12,7 @@ logging:
     http.logging: debug
     org.springframework.test: warn
     com.amazonaws.util.EC2MetadataUtils: error
+    com.backend: debug
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] [%logger{0}:%line] [%X{request_id:-startup}] - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] [%logger{0}:%line] [%X{request_id:-startup}] - %msg%n"

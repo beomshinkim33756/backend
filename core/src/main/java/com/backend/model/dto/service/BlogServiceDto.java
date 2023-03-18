@@ -1,21 +1,19 @@
-package com.backend.model.dto;
+package com.backend.model.dto.service;
 
-import com.backend.model.request.SearchBlogRequestDto;
+import com.backend.model.request.FindBlogRequestDto;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
-
 @Getter
 @ToString
-public class BlogDto {
+public class BlogServiceDto {
 
     private String keyword;
     private String sort;
     private String page;
     private String size;
 
-    public BlogDto(SearchBlogRequestDto requestDto) {
+    public BlogServiceDto(FindBlogRequestDto requestDto) {
         this.keyword = requestDto.getKeyword();
         this.sort = requestDto.getSort();
         this.page = requestDto.getPage();
