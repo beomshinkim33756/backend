@@ -54,6 +54,8 @@ project(':core') {
     bootJar { enabled = false } // 부팅 x
     jar { enabled = true } // jar o
     dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        runtimeOnly 'com.h2database:h2'
     }
 }
 
@@ -67,6 +69,15 @@ project(':api') {
 }
 
 project(':data') {
+    bootJar { enabled = false } // 부팅 x
+    jar { enabled = true } // jar o
+
+    dependencies {
+        implementation project(':core')
+    }
+}
+
+project(':cache') {
     bootJar { enabled = false } // 부팅 x
     jar { enabled = true } // jar o
 

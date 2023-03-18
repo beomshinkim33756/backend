@@ -2,4 +2,5 @@ rootProject.name = 'backend'
 include 'core'
 include 'api'
 include 'data'
+include 'cache'
 
