@@ -24,7 +24,7 @@ public class ApiController {
     public ResponseEntity findBlog(
             @Validated FindBlogRequestDto requestDto
     ) throws Exception {
-        BlogResponseDto blogResponseDto = apiService.findBlogList(new BlogRequestDto(requestDto.checkForgery()));
+        BlogResponseDto blogResponseDto = apiService.findBlogList(new BlogRequestDto(requestDto.checkForgery())); // 블로그 리스트 조회
         return ResponseEntity.ok().body(new FindBlogResponseDto(blogResponseDto, ResultCode.SUCCESS));
     }
 

@@ -25,4 +25,13 @@ public enum SortType {
         }
         return null;
     }
+
+    public static boolean isSort(String code) {
+        for (SortType val : values()) {
+            if (val.getCode().equals(code)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

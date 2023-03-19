@@ -35,10 +35,7 @@ public class FindBlogRequestDto {
     }
 
     private boolean checkSort() {
-        if (!(this.sort.equals(SortType.ACCURACY.getCode()) || this.sort.equals(SortType.RECENCY.getCode()))) {
-            return false;
-        }
-        return true;
+        return SortType.isSort(this.sort);
     }
 
     // 카카오기준 max값 50개
@@ -49,7 +46,7 @@ public class FindBlogRequestDto {
                 return false;
             }
             return true;
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e) { // 변조로 인한 포맷 에러 발생
             return false;
         }
     }
