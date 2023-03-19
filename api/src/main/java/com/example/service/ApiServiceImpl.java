@@ -22,6 +22,15 @@ public class ApiServiceImpl implements ApiService {
     private final KakaoBlogProp kakaoBlogProp;
     private final NaverBlogProp naverBlogProp;
 
+    /**
+     * 카카오 API조회 실패시 네이버 API 조회
+     *
+     * 카카오 API 이외 검색 소스 추가시 해당 소스 external-api 추가후
+     * 교체 혹은 언터페이스 교체
+     *
+     * @param blogRequestDto
+     * @return
+     */
     @Override
     public BlogResponseDto findBlogList(BlogRequestDto blogRequestDto) {
         BlogResponseDto blogResponseDto = kakaoBlogApiClient.findBlog(new KakaoBlogApiClientRequestDto(blogRequestDto, kakaoBlogProp)); // 카카오 블로그 호출
