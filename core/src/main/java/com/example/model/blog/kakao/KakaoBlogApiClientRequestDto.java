@@ -16,6 +16,7 @@ public class KakaoBlogApiClientRequestDto {
     private String sort;
     private String page;
     private String size;
+    private String cacheKey;
 
     public KakaoBlogApiClientRequestDto(BlogRequestDto blogRequestDto, KakaoBlogProp kakaoBlogProp) {
         this.host = kakaoBlogProp.getKakaoBlogUrl();
@@ -28,5 +29,7 @@ public class KakaoBlogApiClientRequestDto {
         }
         this.page = blogRequestDto.getPage();
         this.size = blogRequestDto.getSize();
+        StringBuffer sb =new StringBuffer().append("blog:").append(this.query).append(":").append(this.page).append(":").append(this.size).append(":").append(this.sort);
+        this.cacheKey = sb.toString();
     }
 }

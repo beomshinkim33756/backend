@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -19,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class KakaoBlogApiClient {
 
+    @Cacheable(cacheNames = "kakaoBlogCacheStore", key = "#kakaoBlogApiClientRequestDto?.cacheKey")
     public BlogResponseDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
 
         try {

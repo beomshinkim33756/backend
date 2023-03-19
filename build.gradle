@@ -55,6 +55,8 @@ project(':core') {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-validation' // 유효성 검사 라이브러리 추가
+        implementation 'org.springframework.boot:spring-boot-starter-cache' // 캐시 기능 추가
+        implementation 'com.github.ben-manes.caffeine:caffeine:3.1.1' // 캐시 기능 추가
     }
 }
 
@@ -72,21 +74,10 @@ project(':api') {
     dependencies {
         implementation project(':core')
         implementation project(':external-api')
-        implementation project(':cache')
     }
 }
 
 project(':external-api') {
-    bootJar { enabled = false } // 부팅 x
-    jar { enabled = true } // jar o
-
-    dependencies {
-        implementation project(':core')
-    }
-
-}
-
-project(':cache') {
     bootJar { enabled = false } // 부팅 x
     jar { enabled = true } // jar o
 
