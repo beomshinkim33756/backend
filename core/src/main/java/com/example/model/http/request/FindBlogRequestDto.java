@@ -1,4 +1,4 @@
-package com.example.model.request;
+package com.example.model.http.request;
 
 import com.example.exception.CustomException;
 import com.example.exception.ResultCode;

@@ -1,4 +1,4 @@
-package com.example.model.vo;
+package com.example.model.blog.vo;
 
 import lombok.Getter;
 import lombok.Setter;

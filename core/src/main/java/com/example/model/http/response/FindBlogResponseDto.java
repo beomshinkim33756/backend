@@ -1,4 +1,4 @@
-package com.example.model.response;
+package com.example.model.http.response;
 
 import com.example.exception.ResultCode;
 import com.example.model.blog.BlogResponseDto;
