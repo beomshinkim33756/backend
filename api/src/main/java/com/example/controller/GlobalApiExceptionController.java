@@ -1,5 +1,7 @@
-package com.example.exception;
+package com.example.controller;
 
+import com.example.exception.CustomException;
+import com.example.exception.ResultCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

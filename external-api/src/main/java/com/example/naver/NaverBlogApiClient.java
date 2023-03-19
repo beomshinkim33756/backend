@@ -1,8 +1,10 @@
-package com.example.kakao;
+package com.example.naver;
 
 import com.example.model.blog.BlogDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
+import com.example.model.blog.naver.NaverBlogApiClientRequestDto;
+import com.example.model.blog.naver.NaverBlogApiClientResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +19,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class KakaoBlogApiClient {
+public class NaverBlogApiClient {
 
-    public BlogDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
+    public BlogDto findBlog(NaverBlogApiClientRequestDto naverBlogApiClientRequestDto) {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -28,26 +30,26 @@ public class KakaoBlogApiClient {
             HttpEntity httpRequestEntity = new HttpEntity<>(headers);
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // 파라미터 정보
 
-            headers.add("Authorization", kakaoBlogApiClientRequestDto.getToken());
-            params.add("query", kakaoBlogApiClientRequestDto.getQuery());
-            params.add("sort", kakaoBlogApiClientRequestDto.getSort());
-            params.add("page", kakaoBlogApiClientRequestDto.getPage());
-            params.add("size", kakaoBlogApiClientRequestDto.getSize());
+            headers.add("X-Naver-Client-Id", naverBlogApiClientRequestDto.getClientId());
+            headers.add("X-Naver-Client-Secret", naverBlogApiClientRequestDto.getClientSecret());
+            params.add("query", naverBlogApiClientRequestDto.getQuery());
+            params.add("sort", naverBlogApiClientRequestDto.getSort());
+            params.add("start", naverBlogApiClientRequestDto.getStart());
+            params.add("display", naverBlogApiClientRequestDto.getDisplay());
 
-            UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(kakaoBlogApiClientRequestDto.getHost() + "/v2/search/blog").queryParams(params); // GET 요청
-
-            log.debug("[카카오 블로그 요청 파라미터 : {}", params);
+            log.debug("[네이버 블로그 요청 파라미터 : {}", params);
+            UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(naverBlogApiClientRequestDto.getHost() + "/v1/search/blog.json").queryParams(params); // GET 요청
             ResponseEntity<String> apiResponseJson = restTemplate.exchange(uriComponentsBuilder.build().encode().toUri(), HttpMethod.GET, httpRequestEntity, String.class); // 응답
 
             if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
-                KakaoBlogApiClientResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<KakaoBlogApiClientResponseDto>() {});
+                NaverBlogApiClientResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<NaverBlogApiClientResponseDto>() {});
                 return new BlogDto(response);
             } else  {
-                log.error("[카카오 블로그 리스트 요청 실패] =========> {} / {} ", apiResponseJson.getStatusCode(), apiResponseJson.getBody());
+                log.error("[네이버 블로그 리스트 요청 실패] =========> {} / {} ", apiResponseJson.getStatusCode(), apiResponseJson.getBody());
                 return null;
             }
         } catch (Exception e) {
-            log.error("[카카오 블로그 리스트 요청 실패] =========>", e);
+            log.error("[네이버 블로그 리스트 요청 실패] =========>", e);
             return null;
         }
 

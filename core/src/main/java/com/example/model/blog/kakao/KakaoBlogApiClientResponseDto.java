@@ -1,6 +1,5 @@
-package com.example.model.dto.blog.kakao;
+package com.example.model.blog.kakao;
 
-import com.example.model.vo.BlogDocument;
 import com.example.model.vo.BlogMeta;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +12,8 @@ import java.util.List;
 @Setter
 @ToString
 @Slf4j
-public class KakaoBlogResponseDto {
+public class KakaoBlogApiClientResponseDto {
 
-    private List<BlogDocument> documents;
-    private BlogMeta meta;
+    private List<KakaoBlogDocumentApiClientResponseDto> documents;
+    private KakaoBlogMetaApiClientResponseDto meta;
 }

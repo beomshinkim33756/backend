@@ -2,8 +2,8 @@ package com.example.controller;
 
 import com.example.exception.CustomException;
 import com.example.exception.ResultCode;
-import com.example.model.dto.blog.BlogRequestDto;
-import com.example.model.dto.blog.BlogDto;
+import com.example.model.blog.BlogRequestDto;
+import com.example.model.blog.BlogDto;
 import com.example.model.request.FindBlogRequestDto;
 import com.example.model.response.FindBlogResponseDto;
 import com.example.service.ApiService;

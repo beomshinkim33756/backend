@@ -1,13 +1,14 @@
-package com.example.model.dto.blog.kakao;
+package com.example.model.blog.kakao;
 
-import com.example.model.dto.blog.BlogRequestDto;
+import com.example.enums.SortType;
+import com.example.model.blog.BlogRequestDto;
 import com.example.prop.KakaoBlogProp;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-public class KakaoBlogRequestDto {
+public class KakaoBlogApiClientRequestDto {
 
     private String host;
     private String token;
@@ -16,11 +17,15 @@ public class KakaoBlogRequestDto {
     private String page;
     private String size;
 
-    public KakaoBlogRequestDto(BlogRequestDto blogRequestDto, KakaoBlogProp kakaoBlogProp) {
+    public KakaoBlogApiClientRequestDto(BlogRequestDto blogRequestDto, KakaoBlogProp kakaoBlogProp) {
         this.host = kakaoBlogProp.getKakaoBlogUrl();
         this.token = "KakaoAK " + kakaoBlogProp.getKakaoRestKey();
         this.query = blogRequestDto.getKeyword();
-        this.sort = blogRequestDto.getSort();
+        if (blogRequestDto.getSort().equals(SortType.ACCURACY)) {
+            this.sort = "accuracy";
+        } else if (blogRequestDto.getSort().equals(SortType.RECENCY)) {
+            this.sort = "recency";
+        }
         this.page = blogRequestDto.getPage();
         this.size = blogRequestDto.getSize();
     }

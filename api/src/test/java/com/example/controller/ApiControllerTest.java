@@ -1,8 +1,8 @@
 package com.example.controller;
 
 import com.example.exception.ResultCode;
-import com.example.model.dto.blog.BlogDto;
-import com.example.model.dto.blog.kakao.KakaoBlogResponseDto;
+import com.example.model.blog.BlogDto;
+import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
 import com.example.service.ApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -53,7 +53,7 @@ public class ApiControllerTest {
     @DisplayName("블로그 API 호출 파라미터 변조")
     void blog_test_2() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("sort", "accuracy");
+        params.add("sort", "0");
         params.add("page", "ass");
         params.add("size", "10");
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
@@ -66,11 +66,11 @@ public class ApiControllerTest {
     @DisplayName("블로그 API 호출 성공 케이스")
     void blog_test_3() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("sort", "accuracy");
+        params.add("sort", "0");
         params.add("page", "10");
         params.add("size", "10");
         params.add("keyword", "keyword");
-        when(apiService.findBlogList(any())).thenReturn(new BlogDto(new KakaoBlogResponseDto()));
+        when(apiService.findBlogList(any())).thenReturn(new BlogDto(new KakaoBlogApiClientResponseDto()));
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))

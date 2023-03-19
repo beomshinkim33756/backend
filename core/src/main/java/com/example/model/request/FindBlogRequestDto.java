@@ -32,7 +32,7 @@ public class FindBlogRequestDto {
     }
 
     private boolean checkSort() {
-        if (this.sort == null || !(this.sort.equals("accuracy") || this.sort.equals("recency"))) {
+        if (this.sort == null || !(this.sort.equals("0") || this.sort.equals("1"))) {
             return false;
         }
         return true;
