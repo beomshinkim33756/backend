@@ -1,7 +1,5 @@
 package com.example.model.blog.naver;
 
-import com.example.model.vo.BlogDocument;
-import com.example.model.vo.BlogMeta;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

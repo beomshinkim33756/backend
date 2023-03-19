@@ -1,8 +1,6 @@
 package com.example.naver;
 
-import com.example.model.blog.BlogDto;
-import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
-import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
+import com.example.model.blog.BlogResponseDto;
 import com.example.model.blog.naver.NaverBlogApiClientRequestDto;
 import com.example.model.blog.naver.NaverBlogApiClientResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -21,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class NaverBlogApiClient {
 
-    public BlogDto findBlog(NaverBlogApiClientRequestDto naverBlogApiClientRequestDto) {
+    public BlogResponseDto findBlog(NaverBlogApiClientRequestDto naverBlogApiClientRequestDto) {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -43,7 +41,7 @@ public class NaverBlogApiClient {
 
             if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
                 NaverBlogApiClientResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<NaverBlogApiClientResponseDto>() {});
-                return new BlogDto(response);
+                return new BlogResponseDto(response);
             } else  {
                 log.error("[네이버 블로그 리스트 요청 실패] =========> {} / {} ", apiResponseJson.getStatusCode(), apiResponseJson.getBody());
                 return null;

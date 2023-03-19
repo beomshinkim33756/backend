@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.model.blog.BlogDto;
+import com.example.model.blog.BlogResponseDto;
 import com.example.model.blog.BlogRequestDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
 import com.example.model.blog.naver.NaverBlogApiClientRequestDto;
@@ -21,12 +21,13 @@ public class ApiServiceImpl implements ApiService {
     private final NaverBlogApiClient naverBlogApiClient;
     private final KakaoBlogProp kakaoBlogProp;
     private final NaverBlogProp naverBlogProp;
+
     @Override
-    public BlogDto findBlogList(BlogRequestDto blogRequestDto) {
-        BlogDto blogDto = kakaoBlogApiClient.findBlog(new KakaoBlogApiClientRequestDto(blogRequestDto, kakaoBlogProp)); // 카카오 블로그 호출
-//        if (blogDto == null) { // 카카오톡 블로그 불러오기 실패시
-             blogDto = naverBlogApiClient.findBlog(new NaverBlogApiClientRequestDto(blogRequestDto, naverBlogProp)); // 네이버 블로그 호출
-//        }
-        return blogDto;
+    public BlogResponseDto findBlogList(BlogRequestDto blogRequestDto) {
+        BlogResponseDto blogResponseDto = kakaoBlogApiClient.findBlog(new KakaoBlogApiClientRequestDto(blogRequestDto, kakaoBlogProp)); // 카카오 블로그 호출
+        if (blogResponseDto == null) { // 카카오톡 블로그 불러오기 실패시
+             blogResponseDto = naverBlogApiClient.findBlog(new NaverBlogApiClientRequestDto(blogRequestDto, naverBlogProp)); // 네이버 블로그 호출
+        }
+        return blogResponseDto;
     }
 }

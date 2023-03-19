@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.example.exception.ResultCode;
-import com.example.model.blog.BlogDto;
+import com.example.model.blog.BlogResponseDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
 import com.example.service.ApiService;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +70,7 @@ public class ApiControllerTest {
         params.add("page", "10");
         params.add("size", "10");
         params.add("keyword", "keyword");
-        when(apiService.findBlogList(any())).thenReturn(new BlogDto(new KakaoBlogApiClientResponseDto()));
+        when(apiService.findBlogList(any())).thenReturn(new BlogResponseDto(new KakaoBlogApiClientResponseDto()));
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))

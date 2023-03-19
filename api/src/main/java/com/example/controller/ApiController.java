@@ -3,7 +3,7 @@ package com.example.controller;
 import com.example.exception.CustomException;
 import com.example.exception.ResultCode;
 import com.example.model.blog.BlogRequestDto;
-import com.example.model.blog.BlogDto;
+import com.example.model.blog.BlogResponseDto;
 import com.example.model.request.FindBlogRequestDto;
 import com.example.model.response.FindBlogResponseDto;
 import com.example.service.ApiService;
@@ -24,8 +24,8 @@ public class ApiController {
     public ResponseEntity findBlog(
             @Validated FindBlogRequestDto requestDto
     ) throws Exception {
-        BlogDto blogDto = apiService.findBlogList(new BlogRequestDto(requestDto.checkForgery()));
-        return ResponseEntity.ok().body(new FindBlogResponseDto(blogDto, ResultCode.SUCCESS));
+        BlogResponseDto blogResponseDto = apiService.findBlogList(new BlogRequestDto(requestDto.checkForgery()));
+        return ResponseEntity.ok().body(new FindBlogResponseDto(blogResponseDto, ResultCode.SUCCESS));
     }
 
     @GetMapping("/api/v1/find/rank")

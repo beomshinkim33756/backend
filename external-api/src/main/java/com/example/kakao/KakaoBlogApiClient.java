@@ -1,6 +1,6 @@
 package com.example.kakao;
 
-import com.example.model.blog.BlogDto;
+import com.example.model.blog.BlogResponseDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -19,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class KakaoBlogApiClient {
 
-    public BlogDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
+    public BlogResponseDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -41,7 +41,7 @@ public class KakaoBlogApiClient {
 
             if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
                 KakaoBlogApiClientResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<KakaoBlogApiClientResponseDto>() {});
-                return new BlogDto(response);
+                return new BlogResponseDto(response);
             } else  {
                 log.error("[카카오 블로그 리스트 요청 실패] =========> {} / {} ", apiResponseJson.getStatusCode(), apiResponseJson.getBody());
                 return null;

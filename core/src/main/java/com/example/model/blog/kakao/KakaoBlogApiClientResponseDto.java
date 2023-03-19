@@ -1,6 +1,5 @@
 package com.example.model.blog.kakao;
 
-import com.example.model.vo.BlogMeta;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

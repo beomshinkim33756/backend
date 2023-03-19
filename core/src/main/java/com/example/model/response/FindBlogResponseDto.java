@@ -1,8 +1,7 @@
 package com.example.model.response;
 
 import com.example.exception.ResultCode;
-import com.example.model.blog.BlogDto;
-import com.example.model.vo.BlogMeta;
+import com.example.model.blog.BlogResponseDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,13 +16,11 @@ import java.util.List;
 public class FindBlogResponseDto {
 
     private List documents;
-    private BlogMeta meta;
     private String resultCode;
     private String msg;
 
-    public FindBlogResponseDto(BlogDto blogDto, ResultCode resultCode) {
-        this.documents = blogDto.getDocuments();
-        this.meta = blogDto.getMeta();
+    public FindBlogResponseDto(BlogResponseDto blogResponseDto, ResultCode resultCode) {
+        this.documents = blogResponseDto.getDocuments();
         this.resultCode = resultCode.getCode();
         this.msg = resultCode.getMsg();
     }
