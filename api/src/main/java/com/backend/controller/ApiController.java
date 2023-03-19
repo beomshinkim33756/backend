@@ -2,8 +2,8 @@ package com.backend.controller;
 
 import com.backend.exception.CustomException;
 import com.backend.exception.ResultCode;
-import com.backend.model.dto.blog.BlogServiceDto;
-import com.backend.model.dto.blog.BlogDaoDto;
+import com.backend.model.dto.blog.BlogRequestDto;
+import com.backend.model.dto.blog.BlogDto;
 import com.backend.model.request.FindBlogRequestDto;
 import com.backend.model.response.FindBlogResponseDto;
 import com.backend.service.ApiService;
@@ -24,8 +24,8 @@ public class ApiController {
     public ResponseEntity findBlog(
             @Validated FindBlogRequestDto requestDto
     ) throws Exception {
-        BlogDaoDto blogDaoDto = apiService.findBlogList(new BlogServiceDto(requestDto.checkForgery()));
-        return ResponseEntity.ok().body(new FindBlogResponseDto(blogDaoDto, ResultCode.SUCCESS));
+        BlogDto blogDto = apiService.findBlogList(new BlogRequestDto(requestDto.checkForgery()));
+        return ResponseEntity.ok().body(new FindBlogResponseDto(blogDto, ResultCode.SUCCESS));
     }
 
     @GetMapping("/api/v1/find/rank")

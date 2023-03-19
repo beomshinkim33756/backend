@@ -1,9 +1,8 @@
 package com.backend.dao;
 
-import com.backend.model.dto.blog.BlogDaoDto;
+import com.backend.model.dto.blog.BlogDto;
 import com.backend.model.dto.blog.kakao.KakaoBlogRequestDto;
 import com.backend.model.dto.blog.kakao.KakaoBlogResponseDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class ApiDao {
 
-    public BlogDaoDto findBlogByKakao(KakaoBlogRequestDto kakaoBlogRequestDto) {
+    public BlogDto findBlogByKakao(KakaoBlogRequestDto kakaoBlogRequestDto) {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -40,7 +39,7 @@ public class ApiDao {
 
             if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
                 KakaoBlogResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<KakaoBlogResponseDto>() {});
-                return new BlogDaoDto(response);
+                return new BlogDto(response);
             } else  {
                 log.error("[카카오톡 블로그 리스트 요청 실패] =========> {} / {} ", apiResponseJson.getStatusCode(), apiResponseJson.getBody());
                 return null;

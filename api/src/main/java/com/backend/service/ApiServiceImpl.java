@@ -1,8 +1,8 @@
 package com.backend.service;
 
 import com.backend.dao.ApiDao;
-import com.backend.model.dto.blog.BlogDaoDto;
-import com.backend.model.dto.blog.BlogServiceDto;
+import com.backend.model.dto.blog.BlogDto;
+import com.backend.model.dto.blog.BlogRequestDto;
 import com.backend.model.dto.blog.kakao.KakaoBlogRequestDto;
 import com.backend.prop.KakaoBlogProp;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +17,11 @@ public class ApiServiceImpl implements ApiService {
     private final ApiDao apiDao;
     private final KakaoBlogProp kakaoBlogProp;
     @Override
-    public BlogDaoDto findBlogList(BlogServiceDto blogServiceDto) throws Exception {
-        BlogDaoDto blogDaoDto = apiDao.findBlogByKakao(new KakaoBlogRequestDto(blogServiceDto, kakaoBlogProp));
-        if (blogDaoDto == null) {
+    public BlogDto findBlogList(BlogRequestDto blogRequestDto) throws Exception {
+        BlogDto blogDto = apiDao.findBlogByKakao(new KakaoBlogRequestDto(blogRequestDto, kakaoBlogProp));
+        if (blogDto == null) {
             // 네이버 호출
         }
-        return blogDaoDto;
+        return blogDto;
     }
 }

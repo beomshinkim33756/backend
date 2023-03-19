@@ -6,14 +6,14 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class BlogServiceDto {
+public class BlogRequestDto {
 
     private String keyword;
     private String sort;
     private String page;
     private String size;
 
-    public BlogServiceDto(FindBlogRequestDto requestDto) {
+    public BlogRequestDto(FindBlogRequestDto requestDto) {
         this.keyword = requestDto.getKeyword();
         this.sort = requestDto.getSort();
         this.page = requestDto.getPage();

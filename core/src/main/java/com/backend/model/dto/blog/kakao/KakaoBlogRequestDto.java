@@ -1,6 +1,6 @@
 package com.backend.model.dto.blog.kakao;
 
-import com.backend.model.dto.blog.BlogServiceDto;
+import com.backend.model.dto.blog.BlogRequestDto;
 import com.backend.prop.KakaoBlogProp;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,12 +16,12 @@ public class KakaoBlogRequestDto {
     private String page;
     private String size;
 
-    public KakaoBlogRequestDto(BlogServiceDto blogServiceDto, KakaoBlogProp kakaoBlogProp) {
+    public KakaoBlogRequestDto(BlogRequestDto blogRequestDto, KakaoBlogProp kakaoBlogProp) {
         this.host = kakaoBlogProp.getKakaoBlogUrl();
         this.token = "KakaoAK " + kakaoBlogProp.getKakaoRestKey();
-        this.query = blogServiceDto.getKeyword();
-        this.sort = blogServiceDto.getSort();
-        this.page = blogServiceDto.getPage();
-        this.size = blogServiceDto.getSize();
+        this.query = blogRequestDto.getKeyword();
+        this.sort = blogRequestDto.getSort();
+        this.page = blogRequestDto.getPage();
+        this.size = blogRequestDto.getSize();
     }
 }

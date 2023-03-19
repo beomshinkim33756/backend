@@ -10,12 +10,12 @@ import java.util.List;
 
 @Data
 @ToString
-public class BlogDaoDto {
+public class BlogDto {
 
     private List<BlogDocument> documents;
     private BlogMeta meta;
 
-    public BlogDaoDto(KakaoBlogResponseDto kakaoBlogResponseDto) {
+    public BlogDto(KakaoBlogResponseDto kakaoBlogResponseDto) {
         this.documents = kakaoBlogResponseDto.getDocuments();
         this.meta = kakaoBlogResponseDto.getMeta();
     }

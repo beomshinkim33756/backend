@@ -1,7 +1,7 @@
 package com.backend.model.response;
 
 import com.backend.exception.ResultCode;
-import com.backend.model.dto.blog.BlogDaoDto;
+import com.backend.model.dto.blog.BlogDto;
 import com.backend.model.vo.BlogMeta;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -21,9 +21,9 @@ public class FindBlogResponseDto {
     private String resultCode;
     private String msg;
 
-    public FindBlogResponseDto(BlogDaoDto blogDaoDto, ResultCode resultCode) {
-        this.documents = blogDaoDto.getDocuments();
-        this.meta = blogDaoDto.getMeta();
+    public FindBlogResponseDto(BlogDto blogDto, ResultCode resultCode) {
+        this.documents = blogDto.getDocuments();
+        this.meta = blogDto.getMeta();
         this.resultCode = resultCode.getCode();
         this.msg = resultCode.getMsg();
     }
