@@ -1,13 +1,15 @@
 package com.backend.model.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
 
-@Data
+@Getter
+@Setter
 @ToString
-public class Document {
+public class BlogDocument {
 
     private String title;
     private String contents;

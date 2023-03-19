@@ -1,15 +1,14 @@
 package com.backend.dao;
 
-import com.backend.model.dto.BlogDaoDto;
-import com.backend.model.dto.BlogServiceDto;
-import com.backend.prop.KakaoBlogProp;
+import com.backend.model.dto.blog.BlogDaoDto;
+import com.backend.model.dto.blog.kakao.KakaoBlogRequestDto;
+import com.backend.model.dto.blog.kakao.KakaoBlogResponseDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -21,28 +20,36 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class ApiDao {
 
-    private final KakaoBlogProp kakaoBlogProp;
+    public BlogDaoDto findBlogByKakao(KakaoBlogRequestDto kakaoBlogRequestDto) throws JsonProcessingException {
 
-    public BlogDaoDto findBlogByKakao(BlogServiceDto blogServiceDto) {
-        RestTemplate restTemplate = new RestTemplate();
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders(); // 헤더 정보
+            ObjectMapper objectMapper = new ObjectMapper();
+            HttpEntity httpRequestEntity = new HttpEntity<>(headers);
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // 파라미터 정보
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "KakaoAK " + kakaoBlogProp.getKakaoRestKey());
-        HttpEntity httpRequestEntity = new HttpEntity<>(headers);
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            headers.add("Authorization", kakaoBlogRequestDto.getToken());
+            params.add("query", kakaoBlogRequestDto.getQuery());
+            params.add("sort", kakaoBlogRequestDto.getSort());
+            params.add("page", kakaoBlogRequestDto.getPage());
+            params.add("size", kakaoBlogRequestDto.getSize());
 
-        params.add("query", " " +  blogServiceDto.getKeyword());
-        params.add("sort", blogServiceDto.getSort());
-        params.add("page", blogServiceDto.getPage());
-        params.add("size", blogServiceDto.getSize());
+            UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(kakaoBlogRequestDto.getHost() + "/v2/search/blog").queryParams(params); // GET 요청
+            ResponseEntity<String> apiResponseJson = restTemplate.exchange(uriComponentsBuilder.build().encode().toUri(), HttpMethod.GET, httpRequestEntity, String.class); // 응답
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(kakaoBlogProp.getKakaoBlogUrl() + "/v2/search/blog")
-                .queryParam("query", " " +  blogServiceDto.getKeyword());
+            if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
+                KakaoBlogResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<KakaoBlogResponseDto>() {});
+                return new BlogDaoDto(response);
+            } else  {
+                log.error("[카카오톡 블로그 리스트 요청 실패] =========> {} / {} ", apiResponseJson.getStatusCode(), apiResponseJson.getBody());
+                return null;
+            }
+        } catch (Exception e) {
+            log.error("[카카오톡 블로그 리스트 요청 실패] =========> ");
+            log.error("{}", e);
+            return null;
+        }
 
-        ResponseEntity<String> apiResponseJson = restTemplate.exchange( builder.build().encode().toUri(), HttpMethod.GET, httpRequestEntity, String.class);
-
-        log.debug("{}", apiResponseJson);
-
-        return null;
     }
 }

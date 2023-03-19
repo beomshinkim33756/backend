@@ -1,7 +1,7 @@
 package com.backend.service;
 
-import com.backend.model.dto.BlogServiceDto;
-import com.backend.model.dto.BlogDaoDto;
+import com.backend.model.dto.blog.BlogServiceDto;
+import com.backend.model.dto.blog.BlogDaoDto;
 
 public interface ApiService {
 

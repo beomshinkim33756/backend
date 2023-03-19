@@ -2,8 +2,8 @@ package com.backend.controller;
 
 import com.backend.exception.CustomException;
 import com.backend.exception.ResultCode;
-import com.backend.model.dto.BlogServiceDto;
-import com.backend.model.dto.BlogDaoDto;
+import com.backend.model.dto.blog.BlogServiceDto;
+import com.backend.model.dto.blog.BlogDaoDto;
 import com.backend.model.request.FindBlogRequestDto;
 import com.backend.model.response.FindBlogResponseDto;
 import com.backend.service.ApiService;

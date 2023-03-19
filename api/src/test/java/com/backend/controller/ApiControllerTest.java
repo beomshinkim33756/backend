@@ -1,7 +1,8 @@
 package com.backend.controller;
 
 import com.backend.exception.ResultCode;
-import com.backend.model.dto.BlogDaoDto;
+import com.backend.model.dto.blog.BlogDaoDto;
+import com.backend.model.dto.blog.kakao.KakaoBlogResponseDto;
 import com.backend.service.ApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,7 +72,7 @@ public class ApiControllerTest {
         params.add("page", "10");
         params.add("size", "10");
         params.add("keyword", "keyword");
-        when(apiService.findBlogList(any())).thenReturn(new BlogDaoDto());
+        when(apiService.findBlogList(any())).thenReturn(new BlogDaoDto(new KakaoBlogResponseDto()));
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))
