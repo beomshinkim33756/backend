@@ -38,7 +38,6 @@ public class NaverBlogApiClient {
             log.debug("[네이버 블로그 요청 파라미터 : {}", params);
             UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(naverBlogApiClientRequestDto.getHost() + "/v1/search/blog.json").queryParams(params); // GET 요청
             ResponseEntity<String> apiResponseJson = restTemplate.exchange(uriComponentsBuilder.build().encode().toUri(), HttpMethod.GET, httpRequestEntity, String.class); // 응답
-
             if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
                 NaverBlogApiClientResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<NaverBlogApiClientResponseDto>() {});
                 return new BlogResponseDto(response);

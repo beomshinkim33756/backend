@@ -16,7 +16,7 @@ public class BlogRequestDto {
 
     public BlogRequestDto(FindBlogRequestDto requestDto) {
         this.keyword = requestDto.getKeyword();
-        this.sort = SortType.of(Integer.parseInt(requestDto.getSort()));
+        this.sort = SortType.of(requestDto.getSort());
         this.page = requestDto.getPage();
         this.size = requestDto.getSize();
     }

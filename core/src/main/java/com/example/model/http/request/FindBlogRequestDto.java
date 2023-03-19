@@ -1,5 +1,7 @@
 package com.example.model.http.request;
 
+import com.example.enums.PageSize;
+import com.example.enums.SortType;
 import com.example.exception.CustomException;
 import com.example.exception.ResultCode;
 import lombok.Getter;
@@ -13,10 +15,11 @@ import javax.validation.constraints.NotBlank;
 @ToString
 public class FindBlogRequestDto {
 
+    @NotBlank(message = "키워드 조건에 누락되었습니다.") // 카카오, 네이버 API 공백 시 에러로 인해 필수 값
     private String keyword;
 
     @NotBlank(message = "정렬 조건에 누락되었습니다.")
-    private String sort; // accuracy, recency
+    private String sort;
 
     @NotBlank(message = "페이지 번호 조건에 누락되었습니다.")
     private String page;
@@ -32,16 +35,17 @@ public class FindBlogRequestDto {
     }
 
     private boolean checkSort() {
-        if (this.sort == null || !(this.sort.equals("0") || this.sort.equals("1"))) {
+        if (!(this.sort.equals(SortType.ACCURACY.getCode()) || this.sort.equals(SortType.RECENCY.getCode()))) {
             return false;
         }
         return true;
     }
 
+    // 카카오기준 max값 50개
     private boolean checkNumber(String val) {
         try {
             Integer num = Integer.parseInt(val);
-            if (num < 1 ||  num > 50) {
+            if (num < PageSize.MIN_PAGE.getCode() ||  num > PageSize.MAX_PAGE.getCode()) {
                 return false;
             }
             return true;

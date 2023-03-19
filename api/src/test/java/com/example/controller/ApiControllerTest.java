@@ -56,6 +56,7 @@ public class ApiControllerTest {
         params.add("sort", "0");
         params.add("page", "ass");
         params.add("size", "10");
+        params.add("keyword", "keyword");
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.PARAM_MANIPULATION.getCode()))
@@ -70,7 +71,7 @@ public class ApiControllerTest {
         params.add("page", "10");
         params.add("size", "10");
         params.add("keyword", "keyword");
-        when(apiService.findBlogList(any())).thenReturn(new BlogResponseDto(new KakaoBlogApiClientResponseDto()));
+        when(apiService.findBlogList(any())).thenReturn(new BlogResponseDto());
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))

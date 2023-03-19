@@ -7,19 +7,19 @@ import lombok.Getter;
 @Getter
 public enum SortType {
 
-    ACCURACY(0), // 정확도
-    RECENCY(1) // 최신순
+    ACCURACY("0"), // 정확도
+    RECENCY("1") // 최신순
     ;
 
-    int code;
+    String code;
 
-    public static SortType of(Integer code) {
+    public static SortType of(String code) {
         if (code == null) {
             return null;
         }
 
         for (SortType val : values()) {
-            if (val.getCode() == code) {
+            if (val.getCode().equals(code)) {
                 return val;
             }
         }
