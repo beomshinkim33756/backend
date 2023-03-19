@@ -61,13 +61,13 @@ project(':api') {
     jar { enabled = false } // jar x
     dependencies {
         implementation project(':core')
-        implementation project(':data')
+        implementation project(':external-api')
     }
 
 
 }
 
-project(':data') {
+project(':external-api') {
     bootJar { enabled = false } // 부팅 x
     jar { enabled = true } // jar o
 
