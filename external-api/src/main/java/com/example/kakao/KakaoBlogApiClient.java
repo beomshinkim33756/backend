@@ -41,7 +41,7 @@ public class KakaoBlogApiClient {
 
             if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
                 KakaoBlogApiClientResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<KakaoBlogApiClientResponseDto>() {});
-                return new BlogResponseDto(response);
+                return new BlogResponseDto(response, Integer.parseInt(kakaoBlogApiClientRequestDto.getPage()), Integer.parseInt(kakaoBlogApiClientRequestDto.getSize()));
             } else  {
                 log.error("[카카오 블로그 리스트 요청 실패] =========> {} / {} ", apiResponseJson.getStatusCode(), apiResponseJson.getBody());
                 return null;

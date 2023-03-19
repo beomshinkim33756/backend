@@ -20,6 +20,9 @@ public class FindBlogResponseDto {
     private Integer totalCount;
     private Integer pageableCount;
     private Boolean isEnd;
+    private Integer size;
+    private Integer page;
+    private Integer totalPage;
     private String resultCode;
     private String msg;
 
@@ -28,6 +31,9 @@ public class FindBlogResponseDto {
         this.isEnd = blogResponseDto.getIsEnd();
         this.totalCount = blogResponseDto.getTotalCount();
         this.pageableCount = blogResponseDto.getPageableCount();
+        this.totalPage = blogResponseDto.getTotalPage();
+        this.size = blogResponseDto.getSize();
+        this.page = blogResponseDto.getPage();
         this.resultCode = resultCode.getCode();
         this.msg = resultCode.getMsg();
     }
