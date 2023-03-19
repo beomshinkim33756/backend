@@ -1,4 +1,4 @@
-package com.example.model.blog;
+package com.example.model.blog.dto;
 
 import com.example.enums.SortType;
 import com.example.model.http.request.FindBlogRequestDto;

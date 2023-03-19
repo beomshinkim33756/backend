@@ -1,6 +1,6 @@
 package com.example.naver;
 
-import com.example.model.blog.BlogResponseDto;
+import com.example.model.blog.dto.BlogResponseDto;
 import com.example.model.blog.naver.NaverBlogApiClientRequestDto;
 import com.example.model.blog.naver.NaverBlogApiClientResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;

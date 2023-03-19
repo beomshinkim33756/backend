@@ -1,6 +1,6 @@
 package com.example.kakao;
 
-import com.example.model.blog.BlogResponseDto;
+import com.example.model.blog.dto.BlogResponseDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;

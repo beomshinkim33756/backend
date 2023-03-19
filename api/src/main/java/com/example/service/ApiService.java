@@ -1,7 +1,7 @@
 package com.example.service;
 
-import com.example.model.blog.BlogRequestDto;
-import com.example.model.blog.BlogResponseDto;
+import com.example.model.blog.dto.BlogRequestDto;
+import com.example.model.blog.dto.BlogResponseDto;
 
 public interface ApiService {
 

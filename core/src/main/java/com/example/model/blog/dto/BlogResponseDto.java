@@ -1,4 +1,4 @@
-package com.example.model.blog;
+package com.example.model.blog.dto;
 
 import com.example.enums.PageSize;
 import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;

@@ -1,7 +1,7 @@
 package com.example.model.blog.kakao;
 
 import com.example.enums.SortType;
-import com.example.model.blog.BlogRequestDto;
+import com.example.model.blog.dto.BlogRequestDto;
 import com.example.prop.KakaoBlogProp;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,8 +1,7 @@
 package com.example.controller;
 
 import com.example.exception.ResultCode;
-import com.example.model.blog.BlogResponseDto;
-import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
+import com.example.model.blog.dto.BlogResponseDto;
 import com.example.service.ApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

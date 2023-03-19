@@ -1,7 +1,7 @@
 package com.example.model.http.response;
 
 import com.example.exception.ResultCode;
-import com.example.model.blog.BlogResponseDto;
+import com.example.model.blog.dto.BlogResponseDto;
 import com.example.model.blog.vo.BlogDocument;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
