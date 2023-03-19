@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class ApiDao {
 
-    public BlogDaoDto findBlogByKakao(KakaoBlogRequestDto kakaoBlogRequestDto) throws JsonProcessingException {
+    public BlogDaoDto findBlogByKakao(KakaoBlogRequestDto kakaoBlogRequestDto) {
 
         try {
             RestTemplate restTemplate = new RestTemplate();

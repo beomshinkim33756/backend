@@ -18,6 +18,10 @@ public class ApiServiceImpl implements ApiService {
     private final KakaoBlogProp kakaoBlogProp;
     @Override
     public BlogDaoDto findBlogList(BlogServiceDto blogServiceDto) throws Exception {
-        return apiDao.findBlogByKakao(new KakaoBlogRequestDto(blogServiceDto, kakaoBlogProp));
+        BlogDaoDto blogDaoDto = apiDao.findBlogByKakao(new KakaoBlogRequestDto(blogServiceDto, kakaoBlogProp));
+        if (blogDaoDto == null) {
+            // 네이버 호출
+        }
+        return blogDaoDto;
     }
 }
