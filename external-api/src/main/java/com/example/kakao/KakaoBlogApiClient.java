@@ -1,5 +1,6 @@
 package com.example.kakao;
 
+import com.example.enums.CacheType;
 import com.example.model.blog.dto.BlogResponseDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
@@ -22,8 +23,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class KakaoBlogApiClient {
 
-    private final CacheManager cacheManager;
-
     @Cacheable(cacheNames = "kakaoBlogCacheStore", key = "#kakaoBlogApiClientRequestDto?.cacheKey") // 캐시 만료 1분 설정
     public BlogResponseDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
 
@@ -44,6 +43,10 @@ public class KakaoBlogApiClient {
 
             log.debug("[카카오 블로그 요청 파라미터 : {}", params);
             ResponseEntity<String> apiResponseJson = restTemplate.exchange(uriComponentsBuilder.build().encode().toUri(), HttpMethod.GET, httpRequestEntity, String.class); // 응답
+
+            if (true) {
+                throw new Exception();
+            }
 
             if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
                 KakaoBlogApiClientResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<KakaoBlogApiClientResponseDto>() {});

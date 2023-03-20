@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entities.KeywordTb;
+import com.example.enums.CacheType;
 import com.example.model.blog.dto.BlogResponseDto;
 import com.example.model.blog.dto.BlogRequestDto;
 import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
@@ -15,6 +16,7 @@ import com.example.repositories.KeywordTbRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,7 @@ public class ApiServiceImpl implements ApiService {
     private final KakaoBlogProp kakaoBlogProp;
     private final NaverBlogProp naverBlogProp;
     private final KeywordTbRepository keywordTbRepository;
+    private final CacheManager cacheManager;
 
     /**
      * 카카오 API조회 실패시 네이버 API 조회
@@ -47,9 +50,11 @@ public class ApiServiceImpl implements ApiService {
      */
     @Override
     public BlogResponseDto findBlogList(BlogRequestDto blogRequestDto) {
-        BlogResponseDto blogResponseDto = kakaoBlogApiClient.findBlog(new KakaoBlogApiClientRequestDto(blogRequestDto, kakaoBlogProp)); // 카카오 블로그 호출
+        KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto = new KakaoBlogApiClientRequestDto(blogRequestDto, kakaoBlogProp);
+        BlogResponseDto blogResponseDto = kakaoBlogApiClient.findBlog(kakaoBlogApiClientRequestDto); // 카카오 블로그 호출
         if (blogResponseDto == null) { // 카카오톡 블로그 불러오기 실패시
             log.debug("[네이버 블로그 조회] =======>");
+            cacheManager.getCache(CacheType.KAKAO_BLOG_CACHE.getCacheName()).evict(kakaoBlogApiClientRequestDto.getCacheKey());
             blogResponseDto = naverBlogApiClient.findBlog(new NaverBlogApiClientRequestDto(blogRequestDto, naverBlogProp)); // 네이버 블로그 호출
         }
         return blogResponseDto;
@@ -63,6 +68,8 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
+    @Async
+    @Transactional
     public synchronized void incrementCount(String keyword) { // 접근 동기화 처리
         if (StringUtils.isBlank(keyword)) return;
         KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword);
