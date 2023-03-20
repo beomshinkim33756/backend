@@ -122,10 +122,10 @@ GET /api/v1/find/blog HTTP/1.1
 }
 ```
 - API 컨트롤러  GET `/api/v1/find/blog` 요청을 통해 이용 
-    - 파라미터: 키워드, 페이지번호 (1~50), 게시글 개수 (1~50), 정렬 방식(0: ACCURACY, 1: RECENCY)
+    - 파라미터: 키워드, 페이지번호 (촤대 50), 게시글 개수 (최대 50), 정렬 방식(0: ACCURACY, 1: RECENCY)
     - 파라미터 변조 체크
     - 응답 JSON: 게시글 총개수, 페이지 총개수, 현재페이지, 게시글 개수, 마지막 플래그, 게시글 조회 타입, 블로그 리스트, 응답코드/메세지
-    - 게시글 총개수, 페이지 총개수, 현재페이지, 게시글 개수, 마지막 플래그 통한 페이지 기능
+    - 게시글 총개수, 페이지 총개수, 현재페이지, 게시글 개수, 마지막 플래그 통한 Pagination 기능
     - 검색 소스는 카카오 API 사용 (KakaoBlogApiClient) / 캐시 적용 (트래픽 대응)
     - 카카오 API 실패 시 검색 소스 네이버 API 사용 (NaverBlogApiClient)
     - 이외 API 확장성 (ApiService.findBlogList) 교체 / (ApiServiceImpl.findBlogList) 변경
@@ -224,6 +224,7 @@ GET /api/v1/find/rank HTTP/1.1
 
 
 ## 코드레벨 평가항목
+
 - Spring Boot 기능 활용
   - spring boot 전반적인 기능 활용
 - 테스트 케이스
