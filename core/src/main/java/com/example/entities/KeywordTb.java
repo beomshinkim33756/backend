@@ -15,7 +15,7 @@ public class KeywordTb {
     @Column(name = "id")
     private Long id; // 관리자 식별자
 
-    @Column(name = "keyword")
+    @Column(name = "keyword", unique = true)
     @Convert(converter = KeywordConverter.class)
     private String keyword;
 

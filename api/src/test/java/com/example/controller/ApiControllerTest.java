@@ -28,9 +28,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest
-@ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
-@Slf4j
 public class ApiControllerTest {
 
     @Autowired
@@ -83,7 +80,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("인기 검색어 목록 API 조회")
     void rank_test_1 () throws Exception {
-        when(apiService.findKeywordRank(any())).thenReturn(new KeywordResponseDto(new ArrayList<>()));
+        when(apiService.findKeywordRank()).thenReturn(new KeywordResponseDto(new ArrayList<>()));
         mockMvc.perform(get(SEARCH_RANK_URI))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))

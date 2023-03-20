@@ -15,6 +15,7 @@ import com.example.repositories.KeywordTbRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,25 +55,29 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     @Transactional(readOnly = true)
-    public KeywordResponseDto findKeywordRank(KeywordResponseDto keywordResponseDto) {
+    public KeywordResponseDto findKeywordRank() {
         List<KeywordRankDto> ranks = keywordTbRepository.findTop10ByOrderByCountDesc().stream().map(KeywordRankDto::new).collect(Collectors.toList());
         return new KeywordResponseDto(ranks);
     }
 
     @Override
     @Transactional
-    @Async
+//    @Async
     public void incrementCount(String keyword) {
         if (StringUtils.isBlank(keyword)) return;
         log.debug("키워드 : {} 값 증가", keyword);
-        KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword);
-        if (keywordTb != null) {
-            keywordTb.setCount(keywordTb.getCount() + 1);
-        } else {
-            keywordTb = new KeywordTb();
-            keywordTb.setKeyword(keyword);
-            keywordTb.setCount(1L);
+        try {
+            KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword);
+            if (keywordTb != null) {
+                keywordTb.setCount(keywordTb.getCount() + 1);
+            } else {
+                keywordTb = new KeywordTb();
+                keywordTb.setKeyword(keyword);
+                keywordTb.setCount(1L);
+            }
+            keywordTbRepository.save(keywordTb);
+        } catch (DataIntegrityViolationException e) {
+            log.error("error1111");
         }
-        keywordTbRepository.save(keywordTb);
     }
 }

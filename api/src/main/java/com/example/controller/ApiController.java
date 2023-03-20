@@ -34,7 +34,7 @@ public class ApiController {
 
     @GetMapping("/api/v1/find/rank")
     public ResponseEntity findRank() {
-        KeywordResponseDto keywordResponseDto = apiService.findKeywordRank(new KeywordResponseDto()); // 키워드 랭크 조회 및 업데이트
+        KeywordResponseDto keywordResponseDto = apiService.findKeywordRank(); // 키워드 랭크 조회 및 업데이트
         return ResponseEntity.ok().body(new FindRankResponseDto(keywordResponseDto.getRanks(), ResultCode.SUCCESS));
     }
 }
