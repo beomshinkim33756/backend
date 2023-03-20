@@ -68,8 +68,6 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    @Async
-    @Transactional
     public synchronized void incrementCount(String keyword) { // 접근 동기화 처리
         if (StringUtils.isBlank(keyword)) return;
         KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword);
