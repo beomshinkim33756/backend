@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.exception.ResultCode;
 import com.example.model.blog.dto.BlogResponseDto;
+import com.example.model.keyword.dto.KeywordResponseDto;
 import com.example.service.ApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,7 +56,7 @@ public class ApiControllerTest {
     void blog_test_2() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("sort", "0");
-        params.add("page", "ass");
+        params.add("page", "ass"); // 변조
         params.add("size", "10");
         params.add("keyword", "keyword");
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
@@ -72,6 +75,16 @@ public class ApiControllerTest {
         params.add("keyword", "keyword");
         when(apiService.findBlogList(any())).thenReturn(new BlogResponseDto());
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @DisplayName("인기 검색어 목록 API 조회")
+    void rank_test_1 () throws Exception {
+        when(apiService.findKeywordRank(any())).thenReturn(new KeywordResponseDto(new ArrayList<>()));
+        mockMvc.perform(get(SEARCH_RANK_URI))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))
                 .andDo(MockMvcResultHandlers.print());

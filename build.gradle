@@ -72,8 +72,17 @@ project(':api') {
     }
 
     dependencies {
+        // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0' // string blank 검사
+
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
         implementation project(':core')
         implementation project(':external-api')
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
 

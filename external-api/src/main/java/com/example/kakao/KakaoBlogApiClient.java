@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class KakaoBlogApiClient {
 
-    @Cacheable(cacheNames = "kakaoBlogCacheStore", key = "#kakaoBlogApiClientRequestDto?.cacheKey")
+    private final CacheManager cacheManager;
+
+    @Cacheable(cacheNames = "kakaoBlogCacheStore", key = "#kakaoBlogApiClientRequestDto?.cacheKey") // 캐시 만료 1분 설정
+    @CacheEvict(value = "kakaoBlogCacheStore", key = "#kakaoBlogApiClientRequestDto?.cacheKey" )
     public BlogResponseDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
 
         try {
