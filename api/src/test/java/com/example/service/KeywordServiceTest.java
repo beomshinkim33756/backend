@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.model.keyword.dto.KeywordResponseDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class KeywordServiceTest {
         for (int i=0; i < threads.length; i++) threads[i].join();
 
         KeywordResponseDto keywordResponseDto = apiService.findKeywordRank(); // 가장많이 입력된 10개 키워드 count 조회
+        System.out.println(new ObjectMapper().writeValueAsString(keywordResponseDto));
         int count = keywordResponseDto.getRanks().stream().mapToInt(it -> Math.toIntExact(it.getCount())).sum();
         assertEquals(count, threadNumber * cycle);
     }

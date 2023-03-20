@@ -14,9 +14,11 @@ public class KeywordRankDto {
 
     private String keyword;
     private Long count;
+    private Integer order;
 
-    public KeywordRankDto(KeywordTb keywordTb) {
+    public KeywordRankDto(KeywordTb keywordTb, Integer order) {
         this.keyword = keywordTb.getKeyword();
         this.count = keywordTb.getCount();
+        this.order = order;
     }
 }

@@ -3,6 +3,8 @@
 - [개발 환경](#개발-환경)
 - [빌드 및 실행하기](#빌드-및-실행하기)
 - [기능 요구사항](#기능-요구사항)
+- [코드레벨 평가항목](#코드레벨 평가항목)
+- [우대사항](#우대사항)
 
 ---
 
@@ -34,7 +36,7 @@ $ ./gradlew clean build
 $ java -jar api/build/libs/kakaobank.jar
 ```
 
-- 접속 Base URI: `http://localhost:19001`
+- 접속 Base URI: `http://localhost:8080`
 
 ## 기능 요구사항
 ### 필수사항
@@ -45,25 +47,49 @@ $ java -jar api/build/libs/kakaobank.jar
 - 추후 카카오 API 이외에 새로운 검색 소스가 추가될 수 있음을 고려해야 합니다.
 
 
-- Request
+- URL
 
 ```
-http://localhost:19001/api/v1/find/blog
+http://localhost:8080/api/v1/find/blog
 ```
 
+- URI
 ```
 GET /api/v1/find/blog HTTP/1.1
 ```
 
 - Parameter
+
+| 파라미터명 | 타입     |설명|
+|-------|--------|---|
+| keyword  | string |키워드|
+| page  | string   |페이지 번호|
+| size  | string   |게시글 개수|
+| sort  | string   |정렬방식(0: ACCURACY, 1: RECENCY)|
+
 ```
-keyword : "키워드"
-page : "페이지 번호"
-size : "게시글 개수"
-sort : "sorting(0: ACCURACY, 1: RECENCY)"
+?sort=0&page=1&size=3&keyword=키워드99
 ```
 
 - Response
+
+| 파라미터명           | 타입      | 설명                         |
+|-----------------|---------|----------------------------|
+| totalCount      | integer | 게시글총개수                     |
+| totalPage       | integer | 총페이지개수(max 50)             |
+| page            | integer | 현재 페이지                     |
+| size            | integer | 현재 게시글 개수                  |
+| isEnd           | boolean | 마지막 페이지 플래그 (true:마지막 페이지) |
+| enterprise      | string  | 게시글 조회 타입 (KAKAO, NAVER)   |
+| documents       | array   | 블로그 문서                     |
+| documents.title | string  | 블로그 타이틀                    |
+| documents.contents      | string  | 블로그 내용                     |
+| documents.url | string  | 블로그 url                    |
+| documents.blogname | string  | 블로그 이름                     |
+| documents.thumbnail | string  | 블로그 미리보기                   |
+| documents.datetime | string  | 블로그 작성시간                   |
+| resultCode      | string  | 응답코드                       |
+| msg      | string  | 응답메세지                      |
 
 ```json
 {
@@ -89,76 +115,133 @@ sort : "sorting(0: ACCURACY, 1: RECENCY)"
       "blogname": "♥️",
       "thumbnail": "",
       "datetime": "2023-02-23 11:42:00"
-    },
-    {
-      "title": "[항해<b>99</b>]React 심화 주차 핵심 <b>키워드</b>",
-      "contents": "리덕스에서 미들웨어 청크(thunk)의 역할은 뭘까? 먼저 미들웨어는 리덕스가 지니고 있는 핵심 기능이다. Context API 또는 MobX를 사용하는 것과 차별화가 되는 부분입니다. 출처 : [React] 미들웨어 이해하기(1) : redux-thunk (tistory.com) 미들웨어는 객체 대신 함수를 생성하는 액션 생성함수를 작성할 수 있도록...",
-      "url": "http://growingman.tistory.com/31",
-      "blogname": "그로윙맨",
-      "thumbnail": "https://search3.kakaocdn.net/argon/130x130_85_c/3PVM9Wl5Teg",
-      "datetime": "2022-08-11 10:41:06"
     }
   ],
   "resultCode": "00000",
   "msg": "성공"
 }
 ```
-
-- CSV 파일 요청을 받는 컨트롤러 구현
-    - `/upload` URL 요청을 처리하는 `CsvFileUploadController` 클래스를 만듦
-
+- API 컨트롤러  GET `/api/v1/find/blog` 요청을 통해 이용 
+    - 파라미터: 키워드, 페이지번호 (1~50), 게시글 개수 (1~50), 정렬 방식(0: ACCURACY, 1: RECENCY)
+    - 파라미터 변조 체크
+    - 응답 JSON: 게시글 총개수, 페이지 총개수, 현재페이지, 게시글 개수, 마지막 플래그, 게시글 조회 타입, 블로그 리스트, 응답코드/메세지
+    - 게시글 총개수, 페이지 총개수, 현재페이지, 게시글 개수, 마지막 플래그 통한 페이지 기능
+    - 검색 소스는 카카오 API 사용 (KakaoBlogApiClient) / 캐시 적용 (트래픽 대응)
+    - 카카오 API 실패 시 검색 소스 네이버 API 사용 (NaverBlogApiClient)
+    - 이외 API 확장성 (ApiService.findBlogList) 교체 / (ApiServiceImpl.findBlogList) 변경
+    - 키워드 입력 count 처리 (incrementCount) / synchronized 통해 race condition 예방
+    - KeywordTb entity 생성 / KeywordTbRepository jpa 생성
+    - controller unit test (ApiControllerTest) / kakao, naver api service test(KaKaoBlogServiceTest/NaverBlogServiceTest)
+    - 카카오, 네이버 API 키정보 yml 세팅
 
 ### 2. 인기 검색어 목록
 - 사용자들이 많이 검색한 순서대로, 최대 10개의 검색 키워드를 제공합니다.
 - 검색어 별로 검색된 횟수도 함께 표기해 주세요.
 
-- Request
 
+- URL
 ```
-http://localhost:19001/api/v1/find/rank
+http://localhost:8080/api/v1/find/rank
 ```
 
+- URI
 ```
 GET /api/v1/find/rank HTTP/1.1
 ```
 
 - Response
 
+| 파라미터명           | 타입      | 설명         |
+|-----------------|---------|------------|
+| ranks       | array   | 인기 검색어 리스트 |
+| ranks.keyword | string  | 인기 검색어 키워드 |
+| ranks.count      | string  | 인기 검색 횟수   |
+| ranks.order | string  | 인기 검새어 순위  |
+| resultCode      | string  | 응답코드       |
+| msg      | string  | 응답메세지      |
+
 ```json
 {
   "ranks": [
     {
-      "keyword": "키워드99",
-      "count": 7
+      "keyword": "5f5935c61a",
+      "count": 1249,
+      "order": 1
     },
     {
-      "keyword": "키워드66",
-      "count": 4
+      "keyword": "9dd013e77d",
+      "count": 1237,
+      "order": 2
     },
     {
-      "keyword": "키워드",
-      "count": 4
+      "keyword": "d441411949",
+      "count": 1019,
+      "order": 3
     },
     {
-      "keyword": "키워드3",
-      "count": 3
+      "keyword": "3efb52213f",
+      "count": 1004,
+      "order": 4
     },
     {
-      "keyword": "키워드34",
-      "count": 2
+      "keyword": "7b22aaf1b9",
+      "count": 988,
+      "order": 5
+    },
+    {
+      "keyword": "16a0c60f61",
+      "count": 983,
+      "order": 6
+    },
+    {
+      "keyword": "2dd46530dc",
+      "count": 983,
+      "order": 7
+    },
+    {
+      "keyword": "e9c2d1a6fa",
+      "count": 982,
+      "order": 8
+    },
+    {
+      "keyword": "ea7dbf02b9",
+      "count": 969,
+      "order": 9
+    },
+    {
+      "keyword": "803ff424ab",
+      "count": 586,
+      "order": 10
     }
-  ],
-  "resultCode": "00000",
-  "msg": "성공"
+  ]
 }
 ```
 
-## 우대사항
-- 프로젝트 구성 추가 요건
-  - 멀티 모듈 구성 및 모듈간 의존성 제약
+- API 컨트롤러  GET `/api/v1/find/rank` 요청을 통해 이용
+  - jpa를 통한(findTop10ByOrderByCountDesc) 인기 검색 순위 10개 조회
+  - 응답 JSON: 랭크 리스트, 응답 코드/메세지
+  - 키워드, 키워드 검색 횟수, 키워드 순위 응답
 
-- Back-end 추가 요건
-  - 트래픽이 많고, 저장되어 있는 데이터가 많음을 염두에 둔 구현
-  - 동시성 이슈가 발생할 수 있는 부분을 염두에 둔 구현 (예시. 키워드 별로 검색된 횟수의 정확도)
-  - 카카오 블로그 검색 API에 장애가 발생한 경우, 네이버 블로그 검색 API를 통해 데이터 제공
-        <br> * 네이버 블로그 검색 API: https://developers.naver.com/docs/serviceapi/search/blog/blog.md
+
+## 코드레벨 평가항목
+- Spring Boot 기능 활용
+  - spring boot 전반적인 기능 활용
+- 테스트 케이스
+  - 유닛 테스트 작성
+- 에러 처리(Exception Handling)
+  - 글로벌 exception, 비니지니스 exception 처리
+- 불필요한(사용되지 않는) 코드의 존재 여부
+
+
+## 우대사항
+
+### 멀티 모듈 구성
+  - api, core, external-api
+  - api: REST API통신을 위한 모듈
+  - core: 공통 모듈
+  - external-api: 외부 API 호출 모듈
+
+### Back-end 추가 요건
+  - 캐시 기능 추가
+  - synchronized 기능 추가
+  - 장애 대응 API 추가

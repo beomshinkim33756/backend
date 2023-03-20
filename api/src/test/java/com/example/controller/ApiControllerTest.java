@@ -97,7 +97,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("인기 검색어 목록 API 조회 성공")
     void rank_test_1 () throws Exception {
-        when(apiService.findKeywordRank()).thenReturn(new KeywordResponseDto(Arrays.asList(new KeywordRankDto("123", 23L))));
+        when(apiService.findKeywordRank()).thenReturn(new KeywordResponseDto(Arrays.asList(new KeywordRankDto("123", 23L, 1))));
         mockMvc.perform(get(SEARCH_RANK_URI))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))
