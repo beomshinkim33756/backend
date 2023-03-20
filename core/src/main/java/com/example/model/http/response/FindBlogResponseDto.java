@@ -16,16 +16,15 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FindBlogResponseDto {
 
-    private List<BlogDocument> documents;
     private Integer totalCount;
-    private Integer pageableCount;
-    private Boolean isEnd;
-    private Integer size;
-    private Integer page;
     private Integer totalPage;
+    private Integer page;
+    private Integer size;
+    private Boolean isEnd;
+    private String enterprise;
+    private List<BlogDocument> documents;
     private String resultCode;
     private String msg;
-    private String enterprise;
 
 
     public FindBlogResponseDto(BlogResponseDto blogResponseDto) {
@@ -36,13 +35,12 @@ public class FindBlogResponseDto {
             this.documents = blogResponseDto.getDocuments();
             this.isEnd = blogResponseDto.getIsEnd();
             this.totalCount = blogResponseDto.getTotalCount();
-            this.pageableCount = blogResponseDto.getPageableCount();
             this.totalPage = blogResponseDto.getTotalPage();
             this.size = blogResponseDto.getSize();
             this.page = blogResponseDto.getPage();
+            this.enterprise = blogResponseDto.getEnterprise().getCode();
             this.resultCode = ResultCode.SUCCESS.getCode();
             this.msg = ResultCode.SUCCESS.getMsg();
-            this.enterprise = blogResponseDto.getEnterprise().getCode();
         }
 
     }

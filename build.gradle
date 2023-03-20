@@ -64,7 +64,11 @@ project(':core') {
 
 project(':api') {
 
-    bootJar { enabled = true } // 부팅 o
+    bootJar {
+        enabled = true
+        archivesBaseName = 'kakaobank'
+        archiveFileName = 'kakaobank.jar'
+    } // 부팅 o
 
     jar {
         enabled = false // jar x
@@ -82,9 +86,6 @@ project(':api') {
         implementation project(':external-api')
     }
 
-    test {
-        useJUnitPlatform()
-    }
 }
 
 project(':external-api') {

@@ -3,6 +3,7 @@ package com.example.model.blog.vo;
 import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
 import com.example.model.blog.kakao.KakaoBlogDocumentApiClientResponseDto;
 import com.example.model.blog.naver.NaverBlogDocumentApiClientResponseDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,6 +20,8 @@ public class BlogDocument {
     private String url;
     private String blogname;
     private String thumbnail;
+
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp datetime;
 
     public BlogDocument(KakaoBlogDocumentApiClientResponseDto kakaoBlogDocumentApiClientResponseDto) {
