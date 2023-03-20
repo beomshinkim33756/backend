@@ -55,12 +55,12 @@ GET /api/v1/find/blog HTTP/1.1
 
 - Parameter
 
-| 파라미터명 | 타입     |설명|
-|-------|--------|---|
-| keyword  | string |키워드|
-| page  | string   |페이지 번호|
-| size  | string   |게시글 개수|
-| sort  | string   |정렬방식(0: ACCURACY, 1: RECENCY)|
+| 파라미터명   | 필수  | 타입     | 설명                            |
+|---------|-----|--------|-------------------------------|
+| keyword | ○   | string | 키워드                           |
+| page    | ○   | string | 페이지 번호                        |
+| size    | ○   | string | 게시글 개수                        |
+| sort    | ○   | string | 정렬방식(0: ACCURACY, 1: RECENCY) |
 
 ```
 ?sort=0&page=1&size=3&keyword=키워드99
@@ -68,23 +68,23 @@ GET /api/v1/find/blog HTTP/1.1
 
 - Response
 
-| 파라미터명           | 타입      | 설명                         |
-|-----------------|---------|----------------------------|
-| totalCount      | integer | 게시글총개수                     |
-| totalPage       | integer | 총페이지개수(max 50)             |
-| page            | integer | 현재 페이지                     |
-| size            | integer | 현재 게시글 개수                  |
-| isEnd           | boolean | 마지막 페이지 플래그 (true:마지막 페이지) |
-| enterprise      | string  | 게시글 조회 타입 (KAKAO, NAVER)   |
-| documents       | array   | 블로그 문서                     |
-| documents.title | string  | 블로그 타이틀                    |
-| documents.contents      | string  | 블로그 내용                     |
-| documents.url | string  | 블로그 url                    |
-| documents.blogname | string  | 블로그 이름                     |
-| documents.thumbnail | string  | 블로그 미리보기                   |
-| documents.datetime | string  | 블로그 작성시간                   |
-| resultCode      | string  | 응답코드                       |
-| msg      | string  | 응답메세지                      |
+| 파라미터명               | 필수  | 타입      | 설명                         |
+|---------------------|-----|---------|----------------------------|
+| totalCount          | ○   | integer | 게시글총개수                     |
+| totalPage           | ○   | integer | 총페이지개수(max 50)             |
+| page                | ○   | integer | 현재 페이지                     |
+| size                | ○   | integer | 현재 게시글 개수                  |
+| isEnd               | ○   | boolean | 마지막 페이지 플래그 (true:마지막 페이지) |
+| enterprise          | ○   | string  | 게시글 조회 타입 (KAKAO, NAVER)   |
+| documents           | ○   | array   | 블로그 문서                     |
+| documents.title     | ○   | string  | 블로그 타이틀                    |
+| documents.contents  | ○   | string  | 블로그 내용                     |
+| documents.url       | ○   | string  | 블로그 url                    |
+| documents.blogname  | ○   | string  | 블로그 이름                     |
+| documents.thumbnail | X   | string  | 블로그 미리보기                   |
+| documents.datetime  | ○   | string  | 블로그 작성시간                   |
+| resultCode          | ○   | string  | 응답코드                       |
+| msg                 | ○   | string  | 응답메세지                      |
 
 ```json
 {
@@ -143,14 +143,14 @@ GET /api/v1/find/rank HTTP/1.1
 
 - Response
 
-| 파라미터명           | 타입      | 설명         |
-|-----------------|---------|------------|
-| ranks       | array   | 인기 검색어 리스트 |
-| ranks.keyword | string  | 인기 검색어 키워드 |
-| ranks.count      | string  | 인기 검색 횟수   |
-| ranks.order | string  | 인기 검새어 순위  |
-| resultCode      | string  | 응답코드       |
-| msg      | string  | 응답메세지      |
+| 파라미터명         | 필수  | 타입     | 설명         |
+|---------------|-----|--------|------------|
+| ranks         | ○   | array  | 인기 검색어 리스트 |
+| ranks.keyword | ○   | string | 인기 검색어 키워드 |
+| ranks.count   | ○   | string | 인기 검색 횟수   |
+| ranks.order   | ○   | string | 인기 검새어 순위  |
+| resultCode    | ○   | string | 응답코드       |
+| msg           | ○   | string | 응답메세지      |
 
 ```json
 {
@@ -232,3 +232,13 @@ GET /api/v1/find/rank HTTP/1.1
   - 캐시 기능 추가
   - synchronized 기능 추가
   - 장애 대응 API 추가
+
+## 코드정리
+
+| 코드명                | 코드값   | 메세지          | 상태                    |
+|--------------------|-------|--------------|-----------------------|
+| SUCCESS            | 00000 | 성공           | OK                    |
+| SYSTEM_ERROR       | 19999 | 시스템 에러       | INTERNAL_SERVER_ERROR |
+| PARAM_MANIPULATION | 10001 | 파라미터 변조 에러   | BAD_REQUEST           |
+| FAIL_BLOG_LOADING  | 10002 | 블로그 로딩 실패    | OK                    |
+| NOT_EXIST_RANK     | 10003 | 인기 검색어 조회 실패 | OK                    |
