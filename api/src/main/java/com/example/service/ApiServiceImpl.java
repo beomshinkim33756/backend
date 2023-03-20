@@ -18,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -61,23 +63,17 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    @Transactional
-//    @Async
-    public void incrementCount(String keyword) {
+    @Async // 메소드 비동기 실행
+    public synchronized void incrementCount(String keyword) { // 접근 동기화 처리
         if (StringUtils.isBlank(keyword)) return;
-        log.debug("키워드 : {} 값 증가", keyword);
-        try {
-            KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword);
-            if (keywordTb != null) {
-                keywordTb.setCount(keywordTb.getCount() + 1);
-            } else {
-                keywordTb = new KeywordTb();
-                keywordTb.setKeyword(keyword);
-                keywordTb.setCount(1L);
-            }
-            keywordTbRepository.save(keywordTb);
-        } catch (DataIntegrityViolationException e) {
-            log.error("error1111");
+        KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword);
+        if (keywordTb != null) {
+            keywordTb.setCount(keywordTb.getCount() + 1);
+        } else {
+            keywordTb = new KeywordTb();
+            keywordTb.setKeyword(keyword);
+            keywordTb.setCount(1L);
         }
+        keywordTbRepository.save(keywordTb);
     }
 }
