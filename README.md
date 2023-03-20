@@ -28,6 +28,7 @@
 ## 빌드 및 실행하기
 ### 터미널 환경
 - Git, Java 는 설치되어 있다고 가정한다.
+- JAR 다운 링크 https://github.com/beomshinkim33756/backend/blob/main/kakaobank.jar
 
 ```
 $ git https://github.com/beomshinkim33756/backend.git
