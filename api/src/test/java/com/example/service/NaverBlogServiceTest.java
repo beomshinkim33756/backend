@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.enums.EnterpriseType;
 import com.example.enums.SortType;
 import com.example.kakao.KakaoBlogApiClient;
 import com.example.model.blog.dto.BlogRequestDto;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -36,8 +38,9 @@ public class NaverBlogServiceTest {
                         "10"
                 )
         );
-        System.out.println(blogResponseDto);
-        System.out.println(blogResponseDto.getIsEnd() ? "마지막 페이지" : "진행중 페이지");
+
+        assertEquals(EnterpriseType.NAVER, blogResponseDto.getEnterprise());
+        assertEquals(false, blogResponseDto.getIsEnd());
     }
 
     @Test
@@ -52,7 +55,7 @@ public class NaverBlogServiceTest {
                         "10"
                 )
         );
-        System.out.println(blogResponseDto);
-        System.out.println(blogResponseDto.getIsEnd() ? "마지막 페이지" : "진행중 페이지");
+        assertEquals(EnterpriseType.NAVER, blogResponseDto.getEnterprise());
+        assertEquals(true, blogResponseDto.getIsEnd());
     }
 }

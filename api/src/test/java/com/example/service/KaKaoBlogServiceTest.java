@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.enums.EnterpriseType;
 import com.example.enums.SortType;
 import com.example.model.blog.dto.BlogRequestDto;
 import com.example.model.blog.dto.BlogResponseDto;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class KaKaoBlogServiceTest {
@@ -27,6 +30,7 @@ public class KaKaoBlogServiceTest {
                         "10"
                 )
         );
-        System.out.println(blogResponseDto);
+
+        assertEquals(EnterpriseType.KAKAO, blogResponseDto.getEnterprise());
     }
 }

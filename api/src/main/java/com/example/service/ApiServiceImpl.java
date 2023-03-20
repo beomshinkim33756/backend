@@ -54,7 +54,7 @@ public class ApiServiceImpl implements ApiService {
         BlogResponseDto blogResponseDto = kakaoBlogApiClient.findBlog(kakaoBlogApiClientRequestDto); // 카카오 블로그 호출
         if (blogResponseDto == null) { // 카카오톡 블로그 불러오기 실패시
             log.debug("[네이버 블로그 조회] =======>");
-            cacheManager.getCache(CacheType.KAKAO_BLOG_CACHE.getCacheName()).evict(kakaoBlogApiClientRequestDto.getCacheKey());
+            cacheManager.getCache(CacheType.KAKAO_BLOG_CACHE.getCacheName()).evict(kakaoBlogApiClientRequestDto.getCacheKey()); // 캐시 삭제
             blogResponseDto = naverBlogApiClient.findBlog(new NaverBlogApiClientRequestDto(blogRequestDto, naverBlogProp)); // 네이버 블로그 호출
         }
         return blogResponseDto;

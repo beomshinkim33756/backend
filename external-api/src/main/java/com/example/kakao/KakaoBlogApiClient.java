@@ -44,10 +44,6 @@ public class KakaoBlogApiClient {
             log.debug("[카카오 블로그 요청 파라미터 : {}", params);
             ResponseEntity<String> apiResponseJson = restTemplate.exchange(uriComponentsBuilder.build().encode().toUri(), HttpMethod.GET, httpRequestEntity, String.class); // 응답
 
-            if (true) {
-                throw new Exception();
-            }
-
             if (apiResponseJson.getStatusCode().equals(HttpStatus.OK)) {
                 KakaoBlogApiClientResponseDto response = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<KakaoBlogApiClientResponseDto>() {});
                 return new BlogResponseDto(response, Integer.parseInt(kakaoBlogApiClientRequestDto.getPage()), Integer.parseInt(kakaoBlogApiClientRequestDto.getSize()));

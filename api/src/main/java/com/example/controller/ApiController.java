@@ -29,12 +29,14 @@ public class ApiController {
     ) throws Exception {
         BlogResponseDto blogResponseDto = apiService.findBlogList(new BlogRequestDto(requestDto.checkForgery())); // 블로그 리스트 조회
         apiService.incrementCount(requestDto.getKeyword()); // 키워드 조회 값 증가
-        return ResponseEntity.ok().body(new FindBlogResponseDto(blogResponseDto, ResultCode.SUCCESS));
+        FindBlogResponseDto body = new FindBlogResponseDto(blogResponseDto); // 응답값
+        return ResponseEntity.ok().body(body);
     }
 
     @GetMapping("/api/v1/find/rank")
     public ResponseEntity findRank() {
         KeywordResponseDto keywordResponseDto = apiService.findKeywordRank(); // 키워드 랭크 조회 및 업데이트
-        return ResponseEntity.ok().body(new FindRankResponseDto(keywordResponseDto.getRanks(), ResultCode.SUCCESS));
+        FindRankResponseDto body = new FindRankResponseDto(keywordResponseDto.getRanks());
+        return ResponseEntity.ok().body(body);
     }
 }

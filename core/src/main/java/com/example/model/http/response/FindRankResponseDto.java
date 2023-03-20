@@ -19,9 +19,14 @@ public class FindRankResponseDto {
     private String resultCode;
     private String msg;
 
-    public FindRankResponseDto(List<KeywordRankDto> ranks, ResultCode resultCode) {
-        this.ranks = ranks;
-        this.resultCode = resultCode.getCode();
-        this.msg = resultCode.getMsg();
+    public FindRankResponseDto(List<KeywordRankDto> ranks) {
+        if (ranks == null || ranks.size() == 0) {
+            this.resultCode = ResultCode.NOT_EXIST_RANK.getCode();
+            this.msg = ResultCode.NOT_EXIST_RANK.getMsg();
+        } else {
+            this.ranks = ranks;
+            this.resultCode = ResultCode.SUCCESS.getCode();
+            this.msg = ResultCode.SUCCESS.getMsg();
+        }
     }
 }

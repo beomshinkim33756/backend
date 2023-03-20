@@ -25,17 +25,25 @@ public class FindBlogResponseDto {
     private Integer totalPage;
     private String resultCode;
     private String msg;
+    private String enterprise;
 
-    public FindBlogResponseDto(BlogResponseDto blogResponseDto, ResultCode resultCode) {
-        this.documents = blogResponseDto.getDocuments();
-        this.isEnd = blogResponseDto.getIsEnd();
-        this.totalCount = blogResponseDto.getTotalCount();
-        this.pageableCount = blogResponseDto.getPageableCount();
-        this.totalPage = blogResponseDto.getTotalPage();
-        this.size = blogResponseDto.getSize();
-        this.page = blogResponseDto.getPage();
-        this.resultCode = resultCode.getCode();
-        this.msg = resultCode.getMsg();
+
+    public FindBlogResponseDto(BlogResponseDto blogResponseDto) {
+        if (blogResponseDto == null) { // 블로그 조회 실패
+            this.resultCode = ResultCode.FAIL_BLOG_LOADING.getCode();
+            this.msg = ResultCode.FAIL_BLOG_LOADING.getMsg();
+        } else {
+            this.documents = blogResponseDto.getDocuments();
+            this.isEnd = blogResponseDto.getIsEnd();
+            this.totalCount = blogResponseDto.getTotalCount();
+            this.pageableCount = blogResponseDto.getPageableCount();
+            this.totalPage = blogResponseDto.getTotalPage();
+            this.size = blogResponseDto.getSize();
+            this.page = blogResponseDto.getPage();
+            this.resultCode = ResultCode.SUCCESS.getCode();
+            this.msg = ResultCode.SUCCESS.getMsg();
+            this.enterprise = blogResponseDto.getEnterprise().getCode();
+        }
+
     }
-
 }

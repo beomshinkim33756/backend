@@ -1,5 +1,6 @@
 package com.example.model.blog.dto;
 
+import com.example.enums.EnterpriseType;
 import com.example.enums.PageSize;
 import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
 import com.example.model.blog.naver.NaverBlogApiClientResponseDto;
@@ -23,6 +24,7 @@ public class BlogResponseDto {
     private Integer totalPage;
     private Integer size;
     private Integer page;
+    private EnterpriseType enterprise;
 
     public BlogResponseDto(KakaoBlogApiClientResponseDto kakaoBlogApiClientResponseDto, Integer page, Integer size) {
         this.documents = kakaoBlogApiClientResponseDto.getDocuments().stream().map(it -> new BlogDocument(it)).collect(Collectors.toList());
@@ -32,6 +34,7 @@ public class BlogResponseDto {
         this.isEnd = kakaoBlogApiClientResponseDto.getMeta().getIs_end();
         this.size = size;
         this.page = page;
+        this.enterprise = EnterpriseType.KAKAO;
     }
 
     public BlogResponseDto(NaverBlogApiClientResponseDto naverBlogApiClientResponseDto) {
@@ -42,6 +45,7 @@ public class BlogResponseDto {
         this.isEnd = isEndNaver(naverBlogApiClientResponseDto);
         this.size = naverBlogApiClientResponseDto.getDisplay();
         this.page = naverBlogApiClientResponseDto.getStart();
+        this.enterprise = EnterpriseType.NAVER;
     }
 
 
