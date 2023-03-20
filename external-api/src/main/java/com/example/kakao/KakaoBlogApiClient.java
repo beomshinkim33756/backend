@@ -25,7 +25,6 @@ public class KakaoBlogApiClient {
     private final CacheManager cacheManager;
 
     @Cacheable(cacheNames = "kakaoBlogCacheStore", key = "#kakaoBlogApiClientRequestDto?.cacheKey") // 캐시 만료 1분 설정
-    @CacheEvict(value = "kakaoBlogCacheStore", key = "#kakaoBlogApiClientRequestDto?.cacheKey" )
     public BlogResponseDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
 
         try {

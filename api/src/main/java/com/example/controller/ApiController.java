@@ -27,8 +27,8 @@ public class ApiController {
     public ResponseEntity findBlog(
             @Validated FindBlogRequestDto requestDto
     ) throws Exception {
-        apiService.incrementCount(requestDto.getKeyword()); // 키워드 조회 값 증가 (비동기 처리)
         BlogResponseDto blogResponseDto = apiService.findBlogList(new BlogRequestDto(requestDto.checkForgery())); // 블로그 리스트 조회
+        apiService.incrementCount(requestDto.getKeyword()); // 키워드 조회 값 증가
         return ResponseEntity.ok().body(new FindBlogResponseDto(blogResponseDto, ResultCode.SUCCESS));
     }
 

@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -61,50 +62,11 @@ public class KeywordServiceTest {
             threads[i].start();
         } // 10개의 thread가 1000번씩 10개 키워드 입력
 
-        try {
-            Thread.sleep(threadNumber * cycle); // 스레드 슬립
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        for (int i=0; i < threads.length; i++) threads[i].join();
 
         KeywordResponseDto keywordResponseDto = apiService.findKeywordRank(); // 가장많이 입력된 10개 키워드 count 조회
         int count = keywordResponseDto.getRanks().stream().mapToInt(it -> Math.toIntExact(it.getCount())).sum();
         assertEquals(count, threadNumber * cycle);
-    }
-
-
-    @Test
-    @DisplayName("키워드 랭킹 확인")
-    void keyword_test_4() throws Exception {
-        int threadNumber = 10; // 스레드 개수
-        int cycle = 1000; // 사이클
-        int keywordCount = 100; // 키워드 개수
-
-        ArrayList<String> words = new ArrayList<>();
-        Thread[] threads = new Thread[threadNumber];
-
-        while (words.size() < keywordCount) { // 키워드 생성
-            String word = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
-            if (!words.contains(word)) words.add(word);
-        }
-
-        for (int i=0 ; i < threads.length ; i++ ) {
-            threads[i] = new Thread(() -> {
-                for (int j=0 ; j< cycle; j++) {
-                    apiService.incrementCount(words.get((int)(System.currentTimeMillis() % keywordCount)));
-                }
-            });
-            threads[i].start();
-        } // 10개의 thread가 1000번씩 10개 키워드 입력
-
-        try {
-            Thread.sleep(threadNumber * cycle); // 스레드 슬립
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        KeywordResponseDto keywordResponseDto = apiService.findKeywordRank(); // 가장많이 입력된 10개 키워드 count 조회
-        System.out.println(keywordResponseDto.getRanks());
     }
 
 }
