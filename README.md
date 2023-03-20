@@ -3,10 +3,10 @@
 - [개발 환경](#개발-환경)
 - [빌드 및 실행하기](#빌드-및-실행하기)
 - [기능 요구사항](#기능-요구사항)
-- [코드레벨 평가항목](#코드레벨 평가항목)
-- [우대사항](#우대사항)
 
 ---
+
+- JAR 다운 링크 https://github.com/beomshinkim33756/backend/blob/main/kakaobank.jar
 
 ## 개발 환경
 - 기본 환경
@@ -28,7 +28,6 @@
 ## 빌드 및 실행하기
 ### 터미널 환경
 - Git, Java 는 설치되어 있다고 가정한다.
-- JAR 다운 링크 https://github.com/beomshinkim33756/backend/blob/main/kakaobank.jar
 
 ```
 $ git https://github.com/beomshinkim33756/backend.git
@@ -40,13 +39,8 @@ $ java -jar api/build/libs/kakaobank.jar
 - 접속 Base URI: `http://localhost:8080`
 
 ## 기능 요구사항
-### 필수사항
-- 키워드를 통해 블로그를 검색할 수 있어야 합니다.
-- 검색 결과에서 Sorting(정확도순, 최신순) 기능을 지원해야 합니다.
-- 검색 결과는 Pagination 형태로 제공해야 합니다.
-- 검색 소스는 카카오 API의 키워드로 블로그 검색(https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide#search-blog)을 활용합니다.
-- 추후 카카오 API 이외에 새로운 검색 소스가 추가될 수 있음을 고려해야 합니다.
 
+### 블로그 검색
 
 - URL
 
@@ -136,9 +130,6 @@ GET /api/v1/find/blog HTTP/1.1
     - 카카오, 네이버 API 키정보 yml 세팅
 
 ### 2. 인기 검색어 목록
-- 사용자들이 많이 검색한 순서대로, 최대 10개의 검색 키워드를 제공합니다.
-- 검색어 별로 검색된 횟수도 함께 표기해 주세요.
-
 
 - URL
 ```
@@ -225,25 +216,19 @@ GET /api/v1/find/rank HTTP/1.1
 
 
 ## 코드레벨 평가항목
-
-- Spring Boot 기능 활용
-  - spring boot 전반적인 기능 활용
-- 테스트 케이스
-  - 유닛 테스트 작성
-- 에러 처리(Exception Handling)
-  - 글로벌 exception, 비니지니스 exception 처리
-- 불필요한(사용되지 않는) 코드의 존재 여부
+- spring boot 전반적인 기능 활용
+- 유닛 테스트 작성
+- 글로벌 exception, 비니지니스 exception 처리
+- 불필요한(사용되지 않는) 코드 미존재
 
 
-## 우대사항
-
-### 멀티 모듈 구성
+## 멀티 모듈 구성
   - api, core, external-api
   - api: REST API통신을 위한 모듈
   - core: 공통 모듈
   - external-api: 외부 API 호출 모듈
 
-### Back-end 추가 요건
+## Back-end 추가 요건
   - 캐시 기능 추가
   - synchronized 기능 추가
   - 장애 대응 API 추가
