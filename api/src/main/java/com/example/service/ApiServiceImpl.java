@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.cache.CacheService;
 import com.example.entities.KeywordTb;
 import com.example.enums.CacheType;
 import com.example.model.blog.dto.BlogResponseDto;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -38,6 +40,7 @@ public class ApiServiceImpl implements ApiService {
     private final NaverBlogProp naverBlogProp;
     private final KeywordTbRepository keywordTbRepository;
     private final CacheManager cacheManager;
+    private final CacheService cacheService;
 
     /**
      * 카카오 API조회 실패시 네이버 API 조회
@@ -63,8 +66,10 @@ public class ApiServiceImpl implements ApiService {
     @Override
     @Transactional(readOnly = true)
     public KeywordResponseDto findKeywordRank() {
-        AtomicInteger order = new AtomicInteger(0);
-        List<KeywordRankDto> ranks = keywordTbRepository.findTop10ByOrderByCountDesc().stream().map(it -> new KeywordRankDto(it, order.incrementAndGet())).collect(Collectors.toList());
+        List<KeywordRankDto> ranks = cacheService.findRanks(); // 캐시적용 1초
+        if (ranks == null || ranks.size() == 0) {
+            cacheManager.getCache(CacheType.RANK_CACHE.getCacheName()).clear(); // 캐시삭제
+        }
         return new KeywordResponseDto(ranks);
     }
 
@@ -83,6 +88,8 @@ public class ApiServiceImpl implements ApiService {
         }
         keywordTbRepository.save(keywordTb);
     }
+
+
 
 
 }

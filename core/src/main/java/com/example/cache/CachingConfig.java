@@ -2,6 +2,7 @@ package com.example.cache;
 
 import com.example.enums.CacheType;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCache;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableCaching
+@Slf4j
 public class CachingConfig {
 
     @Bean
