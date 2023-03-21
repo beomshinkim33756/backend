@@ -5,3 +5,6 @@
 /build/
 /core/build/
 /core/build/classes/java/main/
+/api/out
+/core/out
+/external-api/out
