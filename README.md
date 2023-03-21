@@ -121,10 +121,10 @@ GET /api/v1/find/blog HTTP/1.1
     - 파라미터 변조 체크
     - 응답 JSON: 게시글 총개수, 페이지 총개수, 현재페이지, 게시글 개수, 마지막 플래그, 게시글 조회 타입, 블로그 리스트, 응답코드/메세지
     - 게시글 총개수, 페이지 총개수, 현재페이지, 게시글 개수, 마지막 플래그 통한 Pagination 기능
-    - 검색 소스는 카카오 API 사용 (KakaoBlogApiClient) / 캐시 적용 (트래픽 대응)
+    - 검색 소스는 카카오 API 사용 (KakaoBlogApiClient) / 캐시 처리(60초)
     - 카카오 API 실패 시 검색 소스 네이버 API 사용 (NaverBlogApiClient)
     - 이외 API 확장성 (ApiService.findBlogList) 교체 / (ApiServiceImpl.findBlogList) 변경
-    - 키워드 입력 count 처리 (incrementCount) / synchronized 통해 race condition 예방
+    - 키워드 입력 count 처리 (incrementCount) / 트랜잭션 lock 통해 race condition 예방 / async로 비동기 처리
     - KeywordTb entity 생성 / KeywordTbRepository jpa 생성
     - controller unit test (ApiControllerTest) / kakao, naver api service test(KaKaoBlogServiceTest/NaverBlogServiceTest)
     - 카카오, 네이버 API 키정보 yml 세팅
@@ -213,6 +213,7 @@ GET /api/v1/find/rank HTTP/1.1
   - jpa를 통한(findTop10ByOrderByCountDesc) 인기 검색 순위 10개 조회
   - 응답 JSON: 랭크 리스트, 응답 코드/메세지
   - 키워드, 키워드 검색 횟수, 키워드 순위 응답
+  - 캐시 처리 (1초)
 
 
 ## 코드레벨 평가항목
