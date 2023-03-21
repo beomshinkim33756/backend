@@ -16,8 +16,11 @@ import com.example.repositories.KeywordTbRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.cache.CacheManager;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -66,9 +69,10 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public synchronized void incrementCount(String keyword) { // 접근 동기화 처리
+    @Transactional
+    public void incrementCount(String keyword) { // 접근 동기화 처리
         if (StringUtils.isBlank(keyword)) return;
-        KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword);
+        KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword); // LOCK 설정
         if (keywordTb != null) {
             keywordTb.setCount(keywordTb.getCount() + 1);
         } else {
@@ -78,4 +82,21 @@ public class ApiServiceImpl implements ApiService {
         }
         keywordTbRepository.save(keywordTb);
     }
+
+    @Override
+    @Async
+    @Transactional
+    public void incrementCountAsync(String keyword) {
+        if (StringUtils.isBlank(keyword)) return;
+        KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword); // LOCK 설정
+        if (keywordTb != null) {
+            keywordTb.setCount(keywordTb.getCount() + 1);
+        } else {
+            keywordTb = new KeywordTb();
+            keywordTb.setKeyword(keyword);
+            keywordTb.setCount(1L);
+        }
+        keywordTbRepository.save(keywordTb);
+    }
+
 }

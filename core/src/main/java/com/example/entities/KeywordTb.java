@@ -21,4 +21,5 @@ public class KeywordTb {
 
     @Column(name = "count")
     private Long count;
+
 }

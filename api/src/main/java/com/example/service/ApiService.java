@@ -9,4 +9,5 @@ public interface ApiService {
     BlogResponseDto findBlogList(BlogRequestDto blogRequestDto) ;
     KeywordResponseDto findKeywordRank() ;
     void  incrementCount(String keyword);
+    void  incrementCountAsync(String keyword);
 }

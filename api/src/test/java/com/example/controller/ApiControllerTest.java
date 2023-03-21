@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.enums.EnterpriseType;
 import com.example.exception.ResultCode;
 import com.example.model.blog.dto.BlogResponseDto;
 import com.example.model.keyword.dto.KeywordRankDto;
@@ -72,7 +73,9 @@ public class ApiControllerTest {
         params.add("page", "10");
         params.add("size", "10");
         params.add("keyword", "keyword");
-        when(apiService.findBlogList(any())).thenReturn(new BlogResponseDto());
+        BlogResponseDto blogResponseDto = new BlogResponseDto();
+        blogResponseDto.setEnterprise(EnterpriseType.KAKAO);
+        when(apiService.findBlogList(any())).thenReturn(blogResponseDto);
         mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))

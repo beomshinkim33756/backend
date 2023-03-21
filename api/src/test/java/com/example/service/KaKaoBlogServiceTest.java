@@ -20,7 +20,7 @@ public class KaKaoBlogServiceTest {
 
 
     @Test
-    @DisplayName("카카오 블로그 API 호출")
+    @DisplayName("블로그 서비스 호출 카카오 조회")
     void blog_test_1() throws Exception {
         BlogResponseDto blogResponseDto = apiService.findBlogList(
                 new BlogRequestDto(

@@ -27,7 +27,7 @@ public class NaverBlogServiceTest {
 
 
     @Test
-    @DisplayName("네이버 API 호출")
+    @DisplayName("블로그 서비스 호출 네이버 조회")
     void blog_test_1() throws Exception {
         when(kakaoBlogApiClient.findBlog(any())).thenReturn(null);
         BlogResponseDto blogResponseDto = apiService.findBlogList(
@@ -44,7 +44,7 @@ public class NaverBlogServiceTest {
     }
 
     @Test
-    @DisplayName("네이버 API MAX PAGE 호출")
+    @DisplayName("블로그 서비스 호출 네이버 조회 & 마지막 페이지")
     void blog_test_2() throws Exception {
         when(kakaoBlogApiClient.findBlog(any())).thenReturn(null);
         BlogResponseDto blogResponseDto = apiService.findBlogList(

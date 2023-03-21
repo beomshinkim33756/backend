@@ -3,11 +3,13 @@ package com.example.model.blog.naver;
 import com.example.enums.SortType;
 import com.example.model.blog.dto.BlogRequestDto;
 import com.example.prop.NaverBlogProp;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
+@AllArgsConstructor
 public class NaverBlogApiClientRequestDto {
 
     private String host;
