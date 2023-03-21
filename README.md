@@ -231,7 +231,7 @@ GET /api/v1/find/rank HTTP/1.1
 
 ## Back-end 추가 요건
   - 캐시 기능 추가
-  - synchronized 기능 추가
+  - 트랜잭션 lock 추가
   - 장애 대응 API 추가
 
 ## 코드정리
