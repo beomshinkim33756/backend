@@ -4,6 +4,7 @@ import com.example.enums.PageSize;
 import com.example.enums.SortType;
 import com.example.exception.CustomException;
 import com.example.exception.ResultCode;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class FindBlogRequestDto {
 
     @NotBlank(message = "키워드 조건에 누락되었습니다.") // 카카오, 네이버 API 공백 시 에러로 인해 필수 값

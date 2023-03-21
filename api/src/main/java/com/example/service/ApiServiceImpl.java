@@ -69,6 +69,7 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
+    @Async
     @Transactional
     public void incrementCount(String keyword) { // 접근 동기화 처리
         if (StringUtils.isBlank(keyword)) return;
@@ -83,20 +84,5 @@ public class ApiServiceImpl implements ApiService {
         keywordTbRepository.save(keywordTb);
     }
 
-    @Override
-    @Async
-    @Transactional
-    public void incrementCountAsync(String keyword) {
-        if (StringUtils.isBlank(keyword)) return;
-        KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword); // LOCK 설정
-        if (keywordTb != null) {
-            keywordTb.setCount(keywordTb.getCount() + 1);
-        } else {
-            keywordTb = new KeywordTb();
-            keywordTb.setKeyword(keyword);
-            keywordTb.setCount(1L);
-        }
-        keywordTbRepository.save(keywordTb);
-    }
 
 }

@@ -24,15 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class KeywordServiceTest {
 
-
     private static final ExecutorService service = Executors.newFixedThreadPool(100);
 
     @Autowired
     private ApiService apiService;
-
-    @Autowired
-    private KeywordTbRepository keywordTbRepository;
-
 
     @Test
     @DisplayName("키워드 증가")
@@ -64,8 +59,7 @@ public class KeywordServiceTest {
             service.execute(() -> {
                 for (int j=0 ; j< cycle; j++) {
                     try {
-                        String word = words.get((int)(System.currentTimeMillis()% keywordCount));
-                        apiService.incrementCount(word);
+                        apiService.incrementCount(words.get((int) (System.currentTimeMillis() % keywordCount)));
                     } catch (DataIntegrityViolationException e) {
                         System.out.println("INSERT 안된 키워드 동시 INSERT 유니크 오류");
                         errorCnt.getAndIncrement();
@@ -77,8 +71,12 @@ public class KeywordServiceTest {
 
         latch.await();
         assertKeywordCount(errorCnt.get(), totalCount); // 동시성 체크
-    }
 
+        /**
+         *  synchronized, 트랜잭션 lock 테스트 결과
+         *  트랜잭션 lock이 월등히 성능이 좋다
+         */
+    }
 
     private ArrayList<String> generateWords(int count) { // 단어 생성
         ArrayList<String> words = new ArrayList<>();
