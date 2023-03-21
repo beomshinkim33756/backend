@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.enums.CacheType;
 import com.example.exception.CustomException;
 import com.example.exception.ResultCode;
 import com.example.model.blog.dto.BlogRequestDto;
@@ -12,6 +13,7 @@ import com.example.service.ApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApiController {
 
     private final ApiService apiService;
+    private final CacheManager cacheManager;
 
     @GetMapping("/api/v1/find/blog")
     public ResponseEntity findBlog(
@@ -43,7 +46,8 @@ public class ApiController {
     @GetMapping("/api/v1/find/rank")
     public ResponseEntity findRank() { // 인기 검색어 조회 API
         KeywordResponseDto keywordResponseDto = apiService.findKeywordRank(); // 키워드 랭크 조회 및 업데이트
-        FindRankResponseDto body = new FindRankResponseDto(keywordResponseDto.getRanks()); // 응답값
+        if (keywordResponseDto == null) cacheManager.getCache(CacheType.RANK_CACHE.getCacheName()).clear(); // 캐시 삭제
+        FindRankResponseDto body = new FindRankResponseDto(keywordResponseDto); // 응답값
         return ResponseEntity.ok().body(body);
     }
 }

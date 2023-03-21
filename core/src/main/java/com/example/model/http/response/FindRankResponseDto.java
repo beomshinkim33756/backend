@@ -2,6 +2,7 @@ package com.example.model.http.response;
 
 import com.example.exception.ResultCode;
 import com.example.model.keyword.dto.KeywordRankDto;
+import com.example.model.keyword.dto.KeywordResponseDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,12 +20,12 @@ public class FindRankResponseDto {
     private String resultCode;
     private String msg;
 
-    public FindRankResponseDto(List<KeywordRankDto> ranks) {
-        if (ranks == null || ranks.size() == 0) {
+    public FindRankResponseDto(KeywordResponseDto keywordResponseDto) {
+        if (keywordResponseDto == null) {
             this.resultCode = ResultCode.NOT_EXIST_RANK.getCode();
             this.msg = ResultCode.NOT_EXIST_RANK.getMsg();
         } else {
-            this.ranks = ranks;
+            this.ranks = keywordResponseDto.getRanks();
             this.resultCode = ResultCode.SUCCESS.getCode();
             this.msg = ResultCode.SUCCESS.getMsg();
         }

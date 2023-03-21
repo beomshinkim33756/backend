@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.cache.CacheService;
 import com.example.entities.KeywordTb;
 import com.example.enums.CacheType;
 import com.example.model.blog.dto.BlogResponseDto;
@@ -40,7 +39,6 @@ public class ApiServiceImpl implements ApiService {
     private final NaverBlogProp naverBlogProp;
     private final KeywordTbRepository keywordTbRepository;
     private final CacheManager cacheManager;
-    private final CacheService cacheService;
 
     /**
      * 카카오 API조회 실패시 네이버 API 조회
@@ -65,18 +63,25 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "rankCacheStore") // 캐시 만료 1초 설정
     public KeywordResponseDto findKeywordRank() {
-        List<KeywordRankDto> ranks = cacheService.findRanks(); // 캐시적용 1초
-        if (ranks == null || ranks.size() == 0) {
-            cacheManager.getCache(CacheType.RANK_CACHE.getCacheName()).clear(); // 캐시삭제
+        try {
+            log.debug("인기 검색어 조회 ===>");
+            AtomicInteger order = new AtomicInteger(0);
+            List<KeywordRankDto> ranks = keywordTbRepository.findTop10ByOrderByCountDesc().stream().map(it -> new KeywordRankDto(it, order.incrementAndGet())).collect(Collectors.toList());
+            if (ranks == null || ranks.size() == 0) {
+                return null;
+            }
+            return new KeywordResponseDto(ranks);
+        } catch (Exception e) {
+            return null;
         }
-        return new KeywordResponseDto(ranks);
     }
 
     @Override
     @Async
     @Transactional
-    public void incrementCount(String keyword) { // 접근 동기화 처리
+    public void incrementCount(String keyword) { // 카운팅 증가
         if (StringUtils.isBlank(keyword)) return;
         KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword); // LOCK 설정
         if (keywordTb != null) {
