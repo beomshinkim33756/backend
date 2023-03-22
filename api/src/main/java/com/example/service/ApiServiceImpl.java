@@ -66,7 +66,7 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public BlogResponseDto findUrlBlogList(BlogRequestDto blogRequestDto) {
         KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto = new KakaoBlogApiClientRequestDto(blogRequestDto, kakaoBlogProp);
-        return kakaoBlogApiClient.findBlogWithNonCache(kakaoBlogApiClientRequestDto); // 카카오 블로그 호출
+        return kakaoBlogApiClient.findBlogWithNonCache(kakaoBlogApiClientRequestDto); // 카카오 URL 블로그 호출
     }
 
     @Override

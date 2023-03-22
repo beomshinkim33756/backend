@@ -42,6 +42,8 @@ $ java -jar api/build/libs/kakaobank.jar
 
 ### 블로그 검색
 
+
+- 필수 기능
 - URL
 
 ```
@@ -131,6 +133,7 @@ GET /api/v1/find/blog HTTP/1.1
 
 ### 2. 인기 검색어 목록
 
+- 필수 기능
 - URL
 ```
 http://localhost:8080/api/v1/find/rank
@@ -215,6 +218,93 @@ GET /api/v1/find/rank HTTP/1.1
   - 키워드, 키워드 검색 횟수, 키워드 순위 응답
   - 캐시 처리 (1초)
 
+### 블로그 URL 검색
+
+
+- 추가 기능
+- URL
+
+```
+http://localhost:8080/api/v1/find/url/blog
+```
+
+- URI
+```
+GET /api/v1/find/url/blog HTTP/1.1
+```
+
+- Parameter
+
+| 파라미터명   | 필수  | 타입     | 설명                            |
+|---------|-----|--------|-------------------------------|
+| keyword | ○   | string | 키워드                           |
+| page    | ○   | string | 페이지 번호                        |
+| size    | ○   | string | 게시글 개수                        |
+| sort    | ○   | string | 정렬방식(0: ACCURACY, 1: RECENCY) |
+| url     | ○   | string | 조회 블로그 URL                    |
+
+```
+?keyword=3&sort=1&page=1&size=3&url=https://brunch.co.kr
+```
+
+- Response
+
+| 파라미터명               | 필수  | 타입      | 설명                         |
+|---------------------|-----|---------|----------------------------|
+| totalCount          | ○   | integer | 게시글총개수                     |
+| totalPage           | ○   | integer | 총페이지개수(max 50)             |
+| page                | ○   | integer | 현재 페이지                     |
+| size                | ○   | integer | 현재 게시글 개수                  |
+| isEnd               | ○   | boolean | 마지막 페이지 플래그 (true:마지막 페이지) |
+| enterprise          | ○   | string  | 게시글 조회 타입 (KAKAO, NAVER)   |
+| documents           | ○   | array   | 블로그 문서                     |
+| documents.title     | ○   | string  | 블로그 타이틀                    |
+| documents.contents  | ○   | string  | 블로그 내용                     |
+| documents.url       | ○   | string  | 블로그 url                    |
+| documents.blogname  | ○   | string  | 블로그 이름                     |
+| documents.thumbnail | ○   | string  | 블로그 미리보기                   |
+| documents.datetime  | ○   | string  | 블로그 작성시간                   |
+| resultCode          | ○   | string  | 응답코드                       |
+| msg                 | ○   | string  | 응답메세지                      |
+
+```json
+{
+    "totalCount": 131,
+    "totalPage": 44,
+    "page": 1,
+    "size": 3,
+    "isEnd": false,
+    "enterprise": "KAKAO",
+    "documents": [
+        {
+            "title": "[Swift] Swift의 sort() 메서드에 대하여",
+            "contents": "크기가 <b>3</b>일 경우 |Z| &gt; |X| + |Y| 스택의 크기가 2일 경우 |Y| &gt; |X| 만약 조건을 만족하지 않으면, Y를 X와 Z중 작은쪽과 합침 위 조건을 만족하거나, stack의 길이가 1이 되면 merge를 종료하고 다음 run을 구함 시간복잡도 timsort는 배열이 무작위가 아니라는 점에서 정렬을 최적화한 좋은 예로, 최선 O(N), 최악 O...",
+            "url": "http://didu-story.tistory.com/430",
+            "blogname": "potato's devlog",
+            "thumbnail": "https://search4.kakaocdn.net/argon/130x130_85_c/BXhbpaeLuJW",
+            "datetime": "2023-03-10 09:36:52"
+        },
+        {
+            "title": "[매일학습일지_44] Chapter 23. 에어비엔비 서비스기획서 Case Study",
+            "contents": "#8주<b>3</b>일차 ​ 1. 커머스 서비스에 대한 이해 ​ 🔸커머스 서비스의 종류 출처: https://blog.pumpkin-raccoon.com/35 - 크게 종합몰, 오픈마켓, 소셜커머스의 세 가지...257693 출처: <b>https://brunch.co.kr</b>/@thesmc/41 종합몰의 구조 / 오픈마켓의 구조 결제 관련 용어와 결제 상태 설명 ​ 2. 서비스 기획서 템플릿 🔸야놀자...",
+            "url": "https://blog.naver.com/eunjincho_ca/223023978916",
+            "blogname": "Study Ground",
+            "thumbnail": "https://search1.kakaocdn.net/argon/130x130_85_c/LSrbXr8Vy6f",
+            "datetime": "2023-02-22 03:16:00"
+        },
+        {
+            "title": "[공지] 마음엮는 간호사 소개",
+            "contents": "정리하고 후배 간호사들에게 공유하기도 합니다. 저는 지금. 출처: <b>https://brunch.co.kr</b> 운동을 합니다. 이브닝 전과 쉬는 날 플라잉 요가를 하는데 이것 때문...요가도 합니다. 요가는 마음수련이지요. 올해 마라톤 도전을 해보려고요. <b>3</b>월에 첫 마라톤 도전!!! 저 사진 정도는 뭐 ㅋㅋㅋㅋ기본입니다..​​ ​ 출처:Pexels...",
+            "url": "https://blog.naver.com/zoo8349/223005839574",
+            "blogname": "마음엮는 간호사",
+            "thumbnail": "https://search4.kakaocdn.net/argon/130x130_85_c/5vUmRBdz7Ta",
+            "datetime": "2023-02-05 06:13:00"
+        }
+    ],
+    "resultCode": "00000",
+    "msg": "성공"
+}
+```
 
 ## 코드레벨 평가항목
 - spring boot 전반적인 기능 활용
@@ -243,3 +333,4 @@ GET /api/v1/find/rank HTTP/1.1
 | PARAM_MANIPULATION | 10001 | 파라미터 변조 에러   | BAD_REQUEST           |
 | FAIL_BLOG_LOADING  | 10002 | 블로그 로딩 실패    | OK                    |
 | NOT_EXIST_RANK     | 10003 | 인기 검색어 조회 실패 | OK                    |
+| PARAMETER_NULL     | 10004 | 파라미터 NULL 에러 | INTERNAL_SERVER_ERROR |

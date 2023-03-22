@@ -86,6 +86,9 @@ project(':api') {
         implementation project(':external-api')
     }
 
+    test {
+        useJUnitPlatform()
+    }
 }
 
 project(':external-api') {
