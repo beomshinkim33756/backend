@@ -29,7 +29,7 @@ public class NaverBlogServiceTest {
     @Test
     @DisplayName("블로그 서비스 호출 네이버 조회")
     void blog_test_1() throws Exception {
-        when(kakaoBlogApiClient.findBlog(any())).thenReturn(null);
+        when(kakaoBlogApiClient.findBlogWithCache(any())).thenReturn(null); // 카카오 호출 실패
         BlogResponseDto blogResponseDto = apiService.findBlogList(
                 new BlogRequestDto(
                         "keyword",
@@ -46,7 +46,7 @@ public class NaverBlogServiceTest {
     @Test
     @DisplayName("블로그 서비스 호출 네이버 조회 & 마지막 페이지")
     void blog_test_2() throws Exception {
-        when(kakaoBlogApiClient.findBlog(any())).thenReturn(null);
+        when(kakaoBlogApiClient.findBlogWithCache(any())).thenReturn(null); // 카카오 호출 실패
         BlogResponseDto blogResponseDto = apiService.findBlogList(
                 new BlogRequestDto(
                         "keyword",

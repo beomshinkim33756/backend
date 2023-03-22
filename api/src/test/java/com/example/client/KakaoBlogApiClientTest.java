@@ -26,7 +26,7 @@ public class KakaoBlogApiClientTest {
     @Test
     @DisplayName("카카오 API 호출")
     void kakao_blog_api_client_test_1() throws Exception {
-        BlogResponseDto blogResponseDto = kakaoBlogApiClient.findBlog(
+        BlogResponseDto blogResponseDto = kakaoBlogApiClient.findBlogWithNonCache(
                 new KakaoBlogApiClientRequestDto(
                         kakaoBlogProp.getKakaoBlogUrl(),
                         "KakaoAK " + kakaoBlogProp.getKakaoRestKey(),
@@ -40,6 +40,36 @@ public class KakaoBlogApiClientTest {
         assertNotNull(blogResponseDto);
         assertEquals(EnterpriseType.KAKAO, blogResponseDto.getEnterprise());
         assertTrue(blogResponseDto.getDocuments().size() > 0);
+    }
+
+
+    @Test
+    @DisplayName("카카오 API 캐시 호출 테스트")
+    void kakao_blog_api_client_test_2() throws Exception {
+        BlogResponseDto blogResponseDto = kakaoBlogApiClient.findBlogWithCache(
+                new KakaoBlogApiClientRequestDto(
+                        kakaoBlogProp.getKakaoBlogUrl(),
+                        "KakaoAK " + kakaoBlogProp.getKakaoRestKey(),
+                        "keyword",
+                        "accuracy",
+                        "10",
+                        "10",
+                        "cachekey"
+                )
+        );
+
+        BlogResponseDto blogResponseDto2 = kakaoBlogApiClient.findBlogWithCache(
+                new KakaoBlogApiClientRequestDto(
+                        kakaoBlogProp.getKakaoBlogUrl(),
+                        "KakaoAK " + kakaoBlogProp.getKakaoRestKey(),
+                        "keyword",
+                        "accuracy",
+                        "10",
+                        "10",
+                        "cachekey"
+                )
+        );
+        assertEquals(blogResponseDto, blogResponseDto2);
     }
 
 }

@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 public interface ApiService {
 
     BlogResponseDto findBlogList(BlogRequestDto blogRequestDto) ;
+    BlogResponseDto findUrlBlogList(BlogRequestDto blogRequestDto) ;
     KeywordResponseDto findKeywordRank() ;
     Future<KeywordTb> incrementCount(String keyword);
 }

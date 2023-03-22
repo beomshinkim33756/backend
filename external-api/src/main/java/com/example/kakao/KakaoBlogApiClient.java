@@ -24,8 +24,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class KakaoBlogApiClient {
 
     @Cacheable(cacheNames = "kakaoBlogCacheStore", key = "#kakaoBlogApiClientRequestDto?.cacheKey") // 캐시 만료 1분 설정
-    public BlogResponseDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
+    public BlogResponseDto findBlogWithCache(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
+        return findBlog(kakaoBlogApiClientRequestDto);
+    }
 
+    public BlogResponseDto findBlogWithNonCache(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
+        return findBlog(kakaoBlogApiClientRequestDto);
+    }
+
+    private BlogResponseDto findBlog(KakaoBlogApiClientRequestDto kakaoBlogApiClientRequestDto) {
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders(); // 헤더 정보
@@ -55,6 +62,5 @@ public class KakaoBlogApiClient {
             log.error("[카카오 블로그 리스트 요청 실패] =========>", e);
             return null;
         }
-
     }
 }

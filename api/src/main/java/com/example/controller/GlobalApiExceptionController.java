@@ -22,34 +22,34 @@ public class GlobalApiExceptionController {
     @ExceptionHandler
     public ResponseEntity<HashMap> handle(MethodArgumentNotValidException e) {
         log.error("[MethodArgumentNotValidException]", e);
-        return exceptionRes(e);
+        return exceptionRes(e, ResultCode.SYSTEM_ERROR);
     }
 
     @ExceptionHandler
     public ResponseEntity<HashMap> handle(BindException e) {
         log.error("[BindException]", e);
-        return exceptionRes(e);
+        return exceptionRes(e, ResultCode.PARAMETER_NULL);
     }
 
     @ExceptionHandler
     public ResponseEntity<HashMap> handle(HttpMessageNotReadableException e) {
         log.error("[HttpMessageNotReadableException]", e);
-        return exceptionRes(e);
+        return exceptionRes(e, ResultCode.SYSTEM_ERROR);
     }
 
 
     @ExceptionHandler
     public ResponseEntity<HashMap> handle(RuntimeException e) {
         log.error("[RuntimeException]", e);
-        return exceptionRes(e);
+        return exceptionRes(e, ResultCode.SYSTEM_ERROR);
     }
 
-    private <T> ResponseEntity<HashMap> exceptionRes(T e) {
+    private <T> ResponseEntity<HashMap> exceptionRes(T e, ResultCode resultCode) {
         HashMap<String, Object> body = new HashMap<>();
-        body.put("resultCode", ResultCode.SYSTEM_ERROR.getCode());
-        body.put("msg", ResultCode.SYSTEM_ERROR.getMsg());
+        body.put("resultCode", resultCode.getCode());
+        body.put("msg", resultCode.getMsg());
         body.put("timestamp", System.currentTimeMillis());
-        return ResponseEntity.status(ResultCode.SYSTEM_ERROR.getStatus()).contentType(MediaType.APPLICATION_JSON).body(body);
+        return ResponseEntity.status(resultCode.getStatus()).contentType(MediaType.APPLICATION_JSON).body(body);
     }
 
     @ExceptionHandler(value = CustomException.class)
