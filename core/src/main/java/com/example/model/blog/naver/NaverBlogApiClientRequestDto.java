@@ -24,7 +24,7 @@ public class NaverBlogApiClientRequestDto {
         this.host = naverBlogProp.getNaverBlogUrl();
         this.clientId = naverBlogProp.getNaverClientId();
         this.clientSecret = naverBlogProp.getNaverClientSecret();
-        this.query = blogRequestDto.getKeyword();
+        this.query = blogRequestDto.getQuery();
         if (blogRequestDto.getSort().equals(SortType.ACCURACY)) {
             this.sort = "sim";
         } else if (blogRequestDto.getSort().equals(SortType.RECENCY)) {

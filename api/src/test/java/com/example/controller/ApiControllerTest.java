@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -48,6 +49,9 @@ public class ApiControllerTest {
 
     @Autowired
     private ApiController apiController;
+
+    @MockBean
+    private CacheManager cacheManager;
 
     private final String SEARCH_BLOG_URI = "/api/v1/find/blog"; // 블로그 조회
     private final String SEARCH_RANK_URI = "/api/v1/find/rank"; // 인기 검색어 조회
@@ -120,40 +124,11 @@ public class ApiControllerTest {
     @Test
     @DisplayName("인기 검색어 목록 API 실패")
     void rank_test_2 () throws Exception {
-        when(apiService.findKeywordRank()).thenReturn(new KeywordResponseDto());
+        when(apiService.findKeywordRank()).thenReturn(null);
         mockMvc.perform(get(SEARCH_RANK_URI))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.NOT_EXIST_RANK.getCode()))
                 .andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    @DisplayName("블로그 API 호출 성공 케이스")
-    void blog_test_5() throws Exception {
-        int threadNumber = 100; // 스레드 개수
-        int cycle = 1000; // 사이클
-        CountDownLatch latch = new CountDownLatch(threadNumber);
-        StopWatch stopWatch = new StopWatch();
-
-        stopWatch.start();
-        // 동기메소드 처리
-        for (int i=0 ; i < threadNumber ; i++ ) {
-            service.execute(() -> {
-
-                try {
-                    apiController.findBlog(new FindBlogRequestDto("keyword", "0", " 10", "10"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-                latch.countDown();
-            });
-        }
-
-        latch.await();
-        stopWatch.stop();
-
-        System.out.println("성능 테스트 : " + stopWatch.getTotalTimeMillis() + " ms");
     }
 
 }

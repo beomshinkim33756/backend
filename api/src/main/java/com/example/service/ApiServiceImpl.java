@@ -20,11 +20,13 @@ import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -81,8 +83,9 @@ public class ApiServiceImpl implements ApiService {
     @Override
     @Async
     @Transactional
-    public void incrementCount(String keyword) { // 카운팅 증가
-        if (StringUtils.isBlank(keyword)) return;
+    public Future<KeywordTb> incrementCount(String keyword) { // 카운팅 증가
+        if (StringUtils.isBlank(keyword)) return null;
+        log.debug("[키워드 카운트 증가]");
         KeywordTb keywordTb = keywordTbRepository.findByKeyword(keyword); // LOCK 설정
         if (keywordTb != null) {
             keywordTb.setCount(keywordTb.getCount() + 1);
@@ -91,9 +94,8 @@ public class ApiServiceImpl implements ApiService {
             keywordTb.setKeyword(keyword);
             keywordTb.setCount(1L);
         }
-        keywordTbRepository.save(keywordTb);
+        return new AsyncResult<>(keywordTbRepository.save(keywordTb));
     }
-
 
 
 

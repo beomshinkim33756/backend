@@ -34,7 +34,7 @@ public class KakaoBlogApiClient {
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // 파라미터 정보
 
             headers.add("Authorization", kakaoBlogApiClientRequestDto.getToken());
-            params.add("query", " " + kakaoBlogApiClientRequestDto.getQuery());
+            params.add("query", kakaoBlogApiClientRequestDto.getQuery());
             params.add("sort", kakaoBlogApiClientRequestDto.getSort());
             params.add("page", kakaoBlogApiClientRequestDto.getPage());
             params.add("size", kakaoBlogApiClientRequestDto.getSize());

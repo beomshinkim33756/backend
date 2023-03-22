@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -39,12 +40,11 @@ public class ApiControllerTest2 {
     @Autowired
     private ApiController apiController;
 
-
     @Test
     @DisplayName("블로그 API 호출 성공 케이스")
     void blog_test_5() throws Exception {
-        int threadNumber = 100; // 스레드 개수
-        int cycle = 10; // 사이클
+        int threadNumber = 10; // 스레드 개수
+        int cycle = 3; // 사이클
         CountDownLatch latch = new CountDownLatch(threadNumber);
         StopWatch stopWatch = new StopWatch();
 

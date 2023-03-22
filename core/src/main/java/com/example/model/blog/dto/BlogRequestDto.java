@@ -11,13 +11,13 @@ import lombok.ToString;
 @AllArgsConstructor
 public class BlogRequestDto {
 
-    private String keyword;
+    private String query;
     private SortType sort;
     private String page;
     private String size;
 
     public BlogRequestDto(FindBlogRequestDto requestDto) {
-        this.keyword = requestDto.getKeyword().trim();
+        this.query = requestDto.getKeyword().trim();
         this.sort = SortType.of(requestDto.getSort());
         this.page = requestDto.getPage();
         this.size = requestDto.getSize();

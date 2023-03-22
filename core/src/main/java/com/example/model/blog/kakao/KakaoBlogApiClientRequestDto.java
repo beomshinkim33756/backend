@@ -23,7 +23,7 @@ public class KakaoBlogApiClientRequestDto {
     public KakaoBlogApiClientRequestDto(BlogRequestDto blogRequestDto, KakaoBlogProp kakaoBlogProp) {
         this.host = kakaoBlogProp.getKakaoBlogUrl();
         this.token = "KakaoAK " + kakaoBlogProp.getKakaoRestKey();
-        this.query = blogRequestDto.getKeyword();
+        this.query = blogRequestDto.getQuery();
         if (blogRequestDto.getSort().equals(SortType.ACCURACY)) {
             this.sort = "accuracy";
         } else if (blogRequestDto.getSort().equals(SortType.RECENCY)) {

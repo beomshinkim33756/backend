@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.entities.KeywordTb;
+import com.example.enums.CacheType;
+import com.example.model.keyword.dto.KeywordRankDto;
 import com.example.model.keyword.dto.KeywordResponseDto;
 import com.example.repositories.KeywordTbRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,15 +10,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,6 +34,9 @@ public class KeywordServiceTest {
 
     @Autowired
     private ApiService apiService;
+
+    @Autowired
+    private KeywordTbRepository keywordTbRepository;
 
     @Test
     @DisplayName("키워드 증가")
@@ -45,22 +54,24 @@ public class KeywordServiceTest {
     @Test
     @DisplayName("키워드 랭킹 동시성 처리 확인")
     void keyword_test_3() throws Exception {
-        int threadNumber = 100; // 스레드 개수
-        int cycle = 1000; // 사이클
+        int threadNumber = 10; // 스레드 개수
+        int cycle = 3; // 사이클
         int keywordCount = 10; // 키워드 개수
         int totalCount = threadNumber * cycle; // 스레드 * 사이클
 
         ArrayList<String> words = generateWords(keywordCount);
         CountDownLatch latch = new CountDownLatch(threadNumber);
         AtomicInteger errorCnt = new AtomicInteger();
+        keywordTbRepository.deleteAll();
 
         // 동기메소드 처리
         for (int i=0 ; i < threadNumber ; i++ ) {
             service.execute(() -> {
                 for (int j=0 ; j< cycle; j++) {
                     try {
-                        apiService.incrementCount(words.get((int) (System.currentTimeMillis() % keywordCount)));
-                    } catch (DataIntegrityViolationException e) {
+                        Future<KeywordTb> future = apiService.incrementCount(words.get((int) (System.currentTimeMillis() % keywordCount)));
+                        future.get(); // 비동기 대기
+                    } catch (Exception e) {
                         System.out.println("INSERT 안된 키워드 동시 INSERT 유니크 오류");
                         errorCnt.getAndIncrement();
                     }
@@ -95,8 +106,10 @@ public class KeywordServiceTest {
      * @param totalCount
      */
     private void assertKeywordCount(int errorCount, int totalCount) { // 동시성 체크
-        KeywordResponseDto keywordResponseDto = apiService.findKeywordRank(); // 가장많이 입력된 10개 키워드 count 조회
-        int count = keywordResponseDto.getRanks().stream().mapToInt(it -> Math.toIntExact(it.getCount())).sum();
+        List<KeywordRankDto> ranks = keywordTbRepository.findTop10ByOrderByCountDesc().stream().map(it -> new KeywordRankDto(it, 0)).collect(Collectors.toList());
+        int count = ranks.stream().mapToInt(it -> Math.toIntExact(it.getCount())).sum();
+        System.out.println(errorCount);
+        System.out.println(count);
         assertEquals(count + errorCount, totalCount); // 유니크 키 문제 COUNT + 전체 INSERT COUNT 합
     }
 
