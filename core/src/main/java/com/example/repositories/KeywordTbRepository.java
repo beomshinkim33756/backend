@@ -3,6 +3,7 @@ package com.example.repositories;
 import com.example.entities.KeywordTb;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,7 @@ public interface KeywordTbRepository extends JpaRepository<KeywordTb, Long> {
     KeywordTb findByKeyword(@Param(value = "keyword") String keyword);
     List<KeywordTb> findTop10ByOrderByCountDesc();
 
+    @Modifying
+    @Query("UPDATE KeywordTb ktb SET ktb.count = 0")
+    int resetSearchCount();
 }
