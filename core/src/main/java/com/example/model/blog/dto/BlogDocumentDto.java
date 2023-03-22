@@ -1,19 +1,16 @@
-package com.example.model.blog.vo;
+package com.example.model.blog.dto;
 
-import com.example.model.blog.kakao.KakaoBlogApiClientRequestDto;
 import com.example.model.blog.kakao.KakaoBlogDocumentApiClientResponseDto;
 import com.example.model.blog.naver.NaverBlogDocumentApiClientResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
 
 @Getter
-@Setter
 @ToString
-public class BlogDocument {
+public class BlogDocumentDto {
 
     private String title;
     private String contents;
@@ -24,7 +21,7 @@ public class BlogDocument {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp datetime;
 
-    public BlogDocument(KakaoBlogDocumentApiClientResponseDto kakaoBlogDocumentApiClientResponseDto) {
+    public BlogDocumentDto(KakaoBlogDocumentApiClientResponseDto kakaoBlogDocumentApiClientResponseDto) {
         this.title = kakaoBlogDocumentApiClientResponseDto.getTitle();
         this.contents = kakaoBlogDocumentApiClientResponseDto.getContents();
         this.url = kakaoBlogDocumentApiClientResponseDto.getUrl();
@@ -33,7 +30,7 @@ public class BlogDocument {
         this.datetime = kakaoBlogDocumentApiClientResponseDto.getDatetime();
     }
 
-    public BlogDocument(NaverBlogDocumentApiClientResponseDto naverBlogDocumentApiClientResponseDto) {
+    public BlogDocumentDto(NaverBlogDocumentApiClientResponseDto naverBlogDocumentApiClientResponseDto) {
         this.title = naverBlogDocumentApiClientResponseDto.getTitle();
         this.contents = naverBlogDocumentApiClientResponseDto.getDescription();
         this.url = naverBlogDocumentApiClientResponseDto.getBloggerlink();

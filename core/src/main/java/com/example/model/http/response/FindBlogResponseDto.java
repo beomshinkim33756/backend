@@ -2,7 +2,7 @@ package com.example.model.http.response;
 
 import com.example.exception.ResultCode;
 import com.example.model.blog.dto.BlogResponseDto;
-import com.example.model.blog.vo.BlogDocument;
+import com.example.model.blog.dto.BlogDocumentDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class FindBlogResponseDto {
     private Integer size;
     private Boolean isEnd;
     private String enterprise;
-    private List<BlogDocument> documents;
+    private List<BlogDocumentDto> documents;
     private String resultCode;
     private String msg;
 

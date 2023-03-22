@@ -6,7 +6,6 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity(name = "KeywordTb")
-@Table
 @Data
 public class KeywordTb {
 

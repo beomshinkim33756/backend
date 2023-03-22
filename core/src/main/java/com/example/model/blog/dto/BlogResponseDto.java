@@ -4,7 +4,6 @@ import com.example.enums.EnterpriseType;
 import com.example.enums.PageSize;
 import com.example.model.blog.kakao.KakaoBlogApiClientResponseDto;
 import com.example.model.blog.naver.NaverBlogApiClientResponseDto;
-import com.example.model.blog.vo.BlogDocument;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class BlogResponseDto {
 
-    private List<BlogDocument> documents;
+    private List<BlogDocumentDto> documents;
     private Integer totalCount;
     private Integer pageableCount;
     private Boolean isEnd;
@@ -27,7 +26,7 @@ public class BlogResponseDto {
     private EnterpriseType enterprise;
 
     public BlogResponseDto(KakaoBlogApiClientResponseDto kakaoBlogApiClientResponseDto, Integer page, Integer size) {
-        this.documents = kakaoBlogApiClientResponseDto.getDocuments().stream().map(it -> new BlogDocument(it)).collect(Collectors.toList());
+        this.documents = kakaoBlogApiClientResponseDto.getDocuments().stream().map(it -> new BlogDocumentDto(it)).collect(Collectors.toList());
         this.totalCount = kakaoBlogApiClientResponseDto.getMeta().getTotal_count();
         this.pageableCount = kakaoBlogApiClientResponseDto.getMeta().getPageable_count();
         this.totalPage = setTotalPage(this.pageableCount, size);
@@ -38,7 +37,7 @@ public class BlogResponseDto {
     }
 
     public BlogResponseDto(NaverBlogApiClientResponseDto naverBlogApiClientResponseDto) {
-        this.documents = naverBlogApiClientResponseDto.getItems().stream().map(it -> new BlogDocument(it)).collect(Collectors.toList());
+        this.documents = naverBlogApiClientResponseDto.getItems().stream().map(it -> new BlogDocumentDto(it)).collect(Collectors.toList());
         this.totalCount = naverBlogApiClientResponseDto.getTotal();
         this.pageableCount = naverBlogApiClientResponseDto.getTotal(); // 네이버 API는 총 개수만 전달하므로 총 개수가 사용가능한 페이지 개수로 처리
         this.totalPage = setTotalPage(this.pageableCount, naverBlogApiClientResponseDto.getDisplay());
