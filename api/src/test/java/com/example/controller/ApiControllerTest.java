@@ -53,15 +53,16 @@ public class ApiControllerTest {
     @MockBean
     private CacheManager cacheManager;
 
-    private final String SEARCH_BLOG_URI = "/api/v1/find/blog"; // 블로그 조회
-    private final String SEARCH_RANK_URI = "/api/v1/find/rank"; // 인기 검색어 조회
+    private final String FIND_BLOG_URI = "/api/v1/find/blog"; // 블로그 조회
+    private final String FIND_RANK_URI = "/api/v1/find/rank"; // 인기 검색어 조회
+    private final String FIND_URL_BLOG_URI = "/api/v1/find/url/blog"; // 인기 검색어 조회
 
     @Test
     @DisplayName("블로그 API 호출 파라미터 NULL 오류")
     void blog_test_1() throws Exception {
-        mockMvc.perform(get(SEARCH_BLOG_URI))
+        mockMvc.perform(get(FIND_BLOG_URI))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(jsonPath("$.resultCode").value(ResultCode.SYSTEM_ERROR.getCode()))
+                .andExpect(jsonPath("$.resultCode").value(ResultCode.PARAMETER_NULL.getCode()))
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -73,7 +74,7 @@ public class ApiControllerTest {
         params.add("page", "ass"); // 변조
         params.add("size", "10");
         params.add("keyword", "keyword");
-        mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
+        mockMvc.perform(get(FIND_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.PARAM_MANIPULATION.getCode()))
                 .andDo(MockMvcResultHandlers.print());
@@ -90,7 +91,7 @@ public class ApiControllerTest {
         BlogResponseDto blogResponseDto = new BlogResponseDto();
         blogResponseDto.setEnterprise(EnterpriseType.KAKAO);
         when(apiService.findBlogList(any())).thenReturn(blogResponseDto);
-        mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
+        mockMvc.perform(get(FIND_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))
                 .andDo(MockMvcResultHandlers.print());
@@ -105,7 +106,7 @@ public class ApiControllerTest {
         params.add("size", "10");
         params.add("keyword", "keyword");
         when(apiService.findBlogList(any())).thenReturn(null);
-        mockMvc.perform(get(SEARCH_BLOG_URI).params(params).characterEncoding("UTF-8"))
+        mockMvc.perform(get(FIND_BLOG_URI).params(params).characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.FAIL_BLOG_LOADING.getCode()))
                 .andDo(MockMvcResultHandlers.print());
@@ -115,7 +116,7 @@ public class ApiControllerTest {
     @DisplayName("인기 검색어 목록 API 조회 성공")
     void rank_test_1 () throws Exception {
         when(apiService.findKeywordRank()).thenReturn(new KeywordResponseDto(Arrays.asList(new KeywordRankDto("123", 23L, 1))));
-        mockMvc.perform(get(SEARCH_RANK_URI))
+        mockMvc.perform(get(FIND_RANK_URI))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))
                 .andDo(MockMvcResultHandlers.print());
@@ -125,9 +126,68 @@ public class ApiControllerTest {
     @DisplayName("인기 검색어 목록 API 실패")
     void rank_test_2 () throws Exception {
         when(apiService.findKeywordRank()).thenReturn(null);
-        mockMvc.perform(get(SEARCH_RANK_URI))
+        mockMvc.perform(get(FIND_RANK_URI))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(ResultCode.NOT_EXIST_RANK.getCode()))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+
+    @Test
+    @DisplayName("URL 블로그 API 호출 파라미터 NULL 오류")
+    void url_blog_test_1() throws Exception {
+        mockMvc.perform(get(FIND_URL_BLOG_URI))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(jsonPath("$.resultCode").value(ResultCode.PARAMETER_NULL.getCode()))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @DisplayName("URL 블로그 API 호출 파라미터 변조")
+    void url_blog_test_2() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("sort", "0");
+        params.add("page", "ass"); // 변조
+        params.add("size", "10");
+        params.add("keyword", "keyword");
+        params.add("url", "url");
+        mockMvc.perform(get(FIND_URL_BLOG_URI).params(params).characterEncoding("UTF-8"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(jsonPath("$.resultCode").value(ResultCode.PARAM_MANIPULATION.getCode()))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @DisplayName("URL 블로그 API 호출 성공 케이스")
+    void url_blog_test_3() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("sort", "0");
+        params.add("page", "10");
+        params.add("size", "10");
+        params.add("keyword", "keyword");
+        params.add("url", "url");
+        BlogResponseDto blogResponseDto = new BlogResponseDto();
+        blogResponseDto.setEnterprise(EnterpriseType.KAKAO);
+        when(apiService.findUrlBlogList(any())).thenReturn(blogResponseDto);
+        mockMvc.perform(get(FIND_URL_BLOG_URI).params(params).characterEncoding("UTF-8"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(ResultCode.SUCCESS.getCode()))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @DisplayName("URL 블로그 API 호출 실패 케이스")
+    void url_blog_test_4() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("sort", "0");
+        params.add("page", "10");
+        params.add("size", "10");
+        params.add("keyword", "keyword");
+        params.add("url", "url");
+        when(apiService.findUrlBlogList(any())).thenReturn(null);
+        mockMvc.perform(get(FIND_URL_BLOG_URI).params(params).characterEncoding("UTF-8"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(ResultCode.FAIL_BLOG_LOADING.getCode()))
                 .andDo(MockMvcResultHandlers.print());
     }
 
